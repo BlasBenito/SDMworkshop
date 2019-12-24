@@ -1,2 +1,2 @@
 # SMDworkshop R package
-**This is a work in progress!!*
+**This is a work in progress!!**
