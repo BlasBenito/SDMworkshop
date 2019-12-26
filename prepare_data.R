@@ -22,7 +22,7 @@ sp$nicho.mapa$nicho.plot #keep this
 nicho.parametros <- t(as.data.frame(sp$nicho.parametros))
 colnames(nicho.parametros) <- c("mean", "sd")
 
-
+#virtual species
 virtualSpecies <- list()
 virtualSpecies$niche.dimensions <- sp$nicho.dimensiones
 virtualSpecies$niche.parameters <- nicho.parametros
