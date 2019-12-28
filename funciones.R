@@ -1378,10 +1378,11 @@ plotVariable <- function(brick, variable){
 
   require(raster)
   require(leaflet)
+  require(viridis)
 
-  x <- variables$brick[[variable]]
+  x <- brick[[variable]]
   x.values <- na.omit(values(x))
-  pal <- colorNumeric(
+  pal <- leaflet::colorNumeric(
     palette = viridis::viridis(100),
     domain = x.values,
     na.color = "transparent"
