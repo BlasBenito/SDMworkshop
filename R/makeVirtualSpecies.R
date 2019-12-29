@@ -1,15 +1,17 @@
-makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
+makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, species.type = c("additive", "multiplicative"), max.n = 200){
 
   #carga librerías
   require(raster)
   require(virtualspecies)
   require(viridis)
-  require(ggplot2)
   require(cowplot)
-  require(tidyr)
-  require(dplyr)
-  require(HH)
+  require(tidyverse, warn.conflicts = FALSE)
   ggplot2::theme_set(cowplot::theme_cowplot())
+
+  #setting random seed
+  if(is.null(seed) == FALSE){
+    set.seed(seed)
+  }
 
   #variables brick to dataframe
   variables.df <-
@@ -21,28 +23,18 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
   if(is.null(niche.parameters) == TRUE){
 
     #gets random niche dimensions
-    variables.names <- names(variables)
-    niche.dimensions <- sample(x = variables.names, sample(x = 2:floor(length(variables.names)/2)))
-
-    #applies automatic vif to niche dimensions to keep uncorrelated ones
-    repeat {
-      vif.result <- data.frame(
-        HH::vif(variables.df[, niche.dimensions]),
-        stringsAsFactors = FALSE
+    variable.names <- variables@data@names
+    if(length(variable.names) > 2){
+      niche.dimensions <- sample(
+        x = variable.names,
+        sample(x = 2:floor(length(variable.names)/2))
         )
-      vif.result$variable <- rownames(vif.result)
-      colnames(vif.result)[1] <- "vif"
-      vif.result <- vif.result[order(vif.result$vif, decreasing=TRUE), ]
-      if (vif.result[1, "vif"] > 5){
-        niche.dimensions <- niche.dimensions[niche.dimensions != vif.result[1, "variable"]]
-        if(length(niche.dimensions) < 2){
-          break
-        }
-      } else {
-        break
-      }
+    } else {
+      niche.dimensions <- variable.names
     }
 
+    #applies automatic vif to niche dimensions to keep uncorrelated ones
+    niche.dimensions <- autoVIF(x = variables.df[, niche.dimensions])
 
     #list to store niche parameters
     niche.parameters <- list()
@@ -50,7 +42,9 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
     #iterates through niche dimensions
     for(i in niche.dimensions){
 
-      #computes random mean and random sd for the niche definition
+      #computes random mean and sd for the niche function
+      #mean is selected between quantiles 0.1 and 0.9 of the range of each niche dimension
+      #sd takes a value between the 0.5 and 0.05 of the range of the variable.
       niche.parameters[[i]] <-
         c(
           sample(x = seq(quantile(variables.df[,i], 0.1), quantile(variables.df[,i], 0.9), length.out = 1000), size = 1),
@@ -58,7 +52,7 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
         )
     }
 
-  }
+  }#end of random species
 
   #getting niche dimensions
   niche.dimensions <- names(niche.parameters)
@@ -122,7 +116,7 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
       size = 0
     )
 
-  #wrapper for virtualspecies::formatFunctions
+  #generates the functions definitions for virtualspecies::generateSpFromFun
   args <- list()
   for(i in 1:length(niche.parameters)){
     args[[i]] <- c(
@@ -146,7 +140,8 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
   virtual.species.temp <- virtualspecies::generateSpFromFun(
     raster.stack = variables[[niche.dimensions]],
     parameters = details,
-    rescale = TRUE
+    rescale = TRUE,
+    species.type = species.type
   )
 
   #raster to dataframe for ggplotting
@@ -155,20 +150,30 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
     na.omit()
 
   #computes initial prevalence
-  prevalence <- sum(niche.map.df$layer) / nrow(niche.map.df)
+  # prevalence <- sum(niche.map.df$layer) / nrow(niche.map.df)
 
   #initial presence cells
   presence.cells <- 1
 
   #loop to adjust prevalence
-  while(presence.cells < (n * 2)){
+  # while(presence.cells < (n * 2)){
 
     #adds presence-absence to the virtual species
+    # virtual.species.temp <- virtualspecies::convertToPA(
+    #   x = virtual.species.temp,
+    #   PA.method = "probability",
+    #   prob.method = "logistic",
+    #   alpha = -0.01,
+    #   species.prevalence = prevalence,
+    #   plot = FALSE
+    # )
+
     virtual.species.temp <- virtualspecies::convertToPA(
+      x = virtual.species.temp,
       PA.method = "probability",
       prob.method = "linear",
-      x = virtual.species.temp,
-      species.prevalence = prevalence,
+      a = 1,
+      b = 0,
       plot = FALSE
     )
 
@@ -179,30 +184,22 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
       filter(layer == TRUE) %>%
       nrow()
 
-    #increases prevalence
-    prevalence <- prevalence + 0.01
-
-  }
+  #   #increases prevalence
+  #   prevalence <- prevalence + 0.01
+  #
+  # }
 
   #adjusting n
-  if(n > presence.cells){n <- presence.cells}
+  if(max.n > presence.cells){max.n <- presence.cells}
 
   #sampling occurrences
   xy <- sampleOccurrences(
     virtual.species.temp,
-    n = n,
+    n = max.n,
     type = "presence only",
     correct.by.suitability = TRUE,
     plot = FALSE
   )$sample.points[c("x", "y")]
-
-  #output object
-  virtual.species <- list()
-  virtual.species$niche.dimensions <- names(niche.parameters)
-  virtual.species$niche.parameters <- niche.parameters
-  virtual.species$niche.plot <- plot.multipanel
-  virtual.species$suitability <- virtual.species.temp$suitab.raster
-  virtual.species$observed.presence <- xy
 
   #plot niche map
   plot.niche.map <- ggplot() +
@@ -235,6 +232,14 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, n = 100){
     axis = "l",
     align = "hv")
   print(plot.multipanel)
+
+  #output object
+  virtual.species <- list()
+  virtual.species$niche.dimensions <- names(niche.parameters)
+  virtual.species$niche.parameters <- niche.parameters
+  virtual.species$niche.plot <- plot.multipanel
+  virtual.species$suitability <- virtual.species.temp$suitab.raster
+  virtual.species$observed.presence <- xy
 
   return(virtual.species)
 

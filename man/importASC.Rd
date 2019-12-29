@@ -11,11 +11,11 @@ to.memory = TRUE
 )
 }
 \arguments{
-\item{folder}{folder storing the .asc raster files.}
+\item{folder}{Folder storing the .asc raster files.}
 
-\item{crs}{character string defining a coordinate reference system as per the PROJ.4 standard. The default crs is \emph{"+init=epsg:4326"}, valid for data using latitude and longitude degrees as coordinates, and the global datum WGS84. Check the help file of \code{\link[sp]{CRS}} for further details. The argument can be set to NULL, or "unknown" if the coordinate reference system is unknown.}
+\item{crs}{Character string defining a coordinate reference system as per the PROJ.4 standard. The default crs is \emph{"+init=epsg:4326"}, valid for data using latitude and longitude degrees as coordinates, and the global datum WGS84. Check the help file of \code{\link[sp]{CRS}} for further details. The argument can be set to NULL, or "unknown" if the coordinate reference system is unknown.}
 
-\item{to.memory}{if TRUE (default option), the function returns a raster brick residing in memory. Otherwise it returns a stack, which resides in the hard disk, and slows down most operations. If the computer has enough RAM memory, use TRUE to speed up any operation on the outcome of this function.}
+\item{to.memory}{If TRUE (default option), the function returns a raster brick residing in memory. Otherwise it returns a stack, which resides in the hard disk, and slows down most operations. If the computer has enough RAM memory, use TRUE to speed up any operation on the outcome of this function.}
 }
 \value{
 A raster brick or stack.

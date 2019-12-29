@@ -59,6 +59,8 @@ niche.parameters <- list(
 vs <- makeVirtualSpecies(
   variables = europe2000,
   niche.parameters = NULL,
-  n = 200
+  max.n = 200,
+  species.type = "multiplicative",
+  seed = NULL
   )
 
