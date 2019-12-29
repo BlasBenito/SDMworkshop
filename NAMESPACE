@@ -3,4 +3,5 @@
 export(autoVIF)
 export(importASC)
 export(importTIF)
+export(makeVirtualSpecies)
 export(plotRaster)

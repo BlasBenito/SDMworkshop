@@ -42,6 +42,17 @@ plotRaster(
   opacity = 0.7
   )
 
+#plotting points
+data(virtualSpecies)
+plotRaster(
+  x = europe2000[["bio1"]],
+  option = "B",
+  opacity = 0.7,
+  points.x = virtualSpecies$observed.presence$x,
+  points.y = virtualSpecies$observed.presence$y,
+  points.size = 5
+)
+
 
 # 3 testing makeVirtualSpecies --------------------------------------------
 library(SDMworkshop)

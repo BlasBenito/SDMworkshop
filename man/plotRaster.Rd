@@ -2,10 +2,11 @@
 % Please edit documentation in R/plotRaster.R
 \name{plotRaster}
 \alias{plotRaster}
-\title{Pretty plots of a raster file}
+\title{Pretty plot of a raster file, and points if provided}
 \usage{
 plotRaster(x, n = 100, opacity = 0.5, begin = 0, end = 1,
-  direction = 1, option = "D")
+  direction = 1, option = "D", points.x = NULL, points.y = NULL,
+  points.groups = NULL, points.legend = "Points", points.size = 10)
 }
 \arguments{
 \item{x}{A raster object. It can be the subset of a brick, as in \code{x[["variable_name"]]}.}
@@ -21,12 +22,22 @@ plotRaster(x, n = 100, opacity = 0.5, begin = 0, end = 1,
 \item{direction}{Order of the colors in the color palette. Use -1 to reverse the color palette.}
 
 \item{option}{A character string indicating the colormap option to use. Four options are available: "magma" (or "A"), "inferno" (or "B"), "plasma" (or "C"), "viridis" (or "D", the default option) and "cividis" (or "E").}
+
+\item{points.x}{Numeric vector with longitude coordinates for a set of points. Must be in the same coordinate reference ystem as \code{x}.}
+
+\item{points.y}{Numeric vector with latitude coordinates for a set of points. Must be in the same coordinate reference ystem as \code{x}, and have the same length as \code{points.x}.}
+
+\item{points.groups}{Numeric or character vector to group sets of points together. Must have the same length as \code{points.x} and \code{points.y}.}
+
+\item{points.legend}{Quoted string with the title to be used in the point legend.}
+
+\item{points.size}{Numeric, size of the points.}
 }
 \value{
 A leaflet plot.
 }
 \description{
-Uses the \code{\link[leaflet]} library to plot a raster file.
+Uses the \code{\link[leaflet]} library to plot a raster file, and overlayed points if the point coordinates are provided. Alternatively, it accepts a grouping vector for the points (useful to, for example, plot the presences of different species at once).
 
 plotRaster(
 x,
@@ -35,7 +46,11 @@ opacity = 0.5,
 begin = 0,
 end = 1,
 direction = 1,
-option = "D"
+option = "D",
+points.x = NULL,
+points.y = NULL,
+points.groups = NULL,
+points.legend = "Points"
 )
 }
 \author{
