@@ -4,10 +4,9 @@
 \name{SDMworkshop-package}
 \alias{SDMworkshop}
 \alias{SDMworkshop-package}
-\title{SDMworkshop: What the Package Does (Title Case)}
+\title{SDMworkshop: Streamlining the Development of Species Distribution Models}
 \description{
-More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Helps developing species distribution models (SDM) with functions to easily plot data, select variables, assess multicollinearity, etc etc
 }
 \details{
 Details
