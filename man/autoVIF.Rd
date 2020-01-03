@@ -8,12 +8,29 @@ autoVIF(x)
 }
 \arguments{
 \item{x}{A data frame with numeric columns.}
+
+\item{try.to.keep}{A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables IN \code{try.to.keep}, then to the other variables available in \code{x}, and finally to the outcome of both vif analyses, always trying to remove variables not in \code{try.to.keep}. This option triggers a message on screen describing which variables are being removed on each step that can be shut down through the argument \code{verbose = TRUE}.}
+
+\item{verbose}{Boolean, defaults to TRUE. Triggers messages describing the actions of the function when \code{try.to.keep} is not \code{NULL}.}
 }
 \value{
 A character vector with the names of the selected variables.
 }
 \description{
 Selects variables within a dataframe that are not correlated with each other, or with linear combinations of other variables, by using the variance inflation factor (VIF) criteria implemented in the \code{\link[HH]{vif}} function.
+}
+\examples{
+data("europe2000")
+df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11")]])
+selected.vars <- autoVIF(
+ x = df,
+ try.to.keep = c("bio5", "bio6", "bio1"),
+ verbose = TRUE
+)
+selected.vars
+
+
+
 }
 \author{
 Blas Benito <blasbenito@gmail.com>

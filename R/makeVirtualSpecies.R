@@ -33,6 +33,29 @@
 #'
 #' Please, check the help files of these three functions to better understand how they work!
 #'
+#' @examples
+#'
+#' data("europe2000")
+#'
+#'#niche parameters list
+#'niche.parameters <- list(
+#'  bio12 = c(500, 250),
+#'  bio5 = c(240, 50),
+#'  bio6 = c(10, 30),
+#'  human_footprint = c(0, 30),
+#'  topo_slope = c(0, 2),
+#'  landcover_veg_herb = c(100, 35)
+#')
+#'
+#'#making the virtual species
+#'vs <- makeVirtualSpecies(
+#'  variables = europe2000,
+#'  niche.parameters = NULL,
+#'  max.n = 200,
+#'  species.type = "multiplicative",
+#'  seed = NULL
+#')
+#'
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @references Leroy, B., Meynard, C.N., Bellard, C. and Courchamp, F. (2016), virtualspecies, an R package to generate virtual species distributions. Ecography, 39: 599-607. doi:10.1111/ecog.01388

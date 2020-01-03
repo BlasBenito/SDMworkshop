@@ -53,6 +53,19 @@ points.groups = NULL,
 points.legend = "Points"
 )
 }
+\examples{
+data(virtualSpecies)
+data(europe2000)
+plotRaster(
+ x = europe2000[["bio1"]],
+ option = "B",
+ opacity = 0.7,
+ points.x = virtualSpecies$observed.presence$x,
+ points.y = virtualSpecies$observed.presence$y,
+ points.size = 5
+)
+
+}
 \author{
 Blas Benito <blasbenito@gmail.com>
 }

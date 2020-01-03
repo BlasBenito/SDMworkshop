@@ -75,3 +75,23 @@ vs <- makeVirtualSpecies(
   seed = NULL
   )
 
+
+# 4 testing autoVIF ----------------------------------------------------
+library(SDMworkshop)
+library(raster)
+data("europe2000")
+df <- as.data.frame(europe2000)
+vif.output <- autoVIF(x = df)
+vif.output <- autoVIF(x = df, try.to.keep = c("bio5", "bio6", "bio12", "ndvi_minimum", "topo_diversity", "biolog"))
+vif.output <- autoVIF(x = df, try.to.keep = c("bio5", "bio6", "bio12", "ndvi_minimum", "topo_diversity", "biolog", "artro"))
+vif.output <- autoVIF(x = df, try.to.keep = c("bio5", "bio6", "bio12", "bio1", "ndvi_minimum", "topo_diversity"), verbose = TRUE)
+
+#example
+data("europe2000")
+df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11")]])
+selected.vars <- autoVIF(
+  x = df,
+  try.to.keep = c("bio5", "bio6", "bio1"),
+  verbose = TRUE
+  )
+selected.vars

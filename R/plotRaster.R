@@ -30,6 +30,18 @@
 #' @param points.size Numeric, size of the points.
 #' @return A leaflet plot.
 #'
+#' @examples
+#' data(virtualSpecies)
+#' data(europe2000)
+#'plotRaster(
+#'  x = europe2000[["bio1"]],
+#'  option = "B",
+#'  opacity = 0.7,
+#'  points.x = virtualSpecies$observed.presence$x,
+#'  points.y = virtualSpecies$observed.presence$y,
+#'  points.size = 5
+#')
+#'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
 plotRaster <- function(x, n = 100, opacity = 0.5, begin = 0, end = 1, direction = 1, option = "D", points.x = NULL, points.y = NULL, points.groups = NULL, points.legend = "Points", points.size = 10){
