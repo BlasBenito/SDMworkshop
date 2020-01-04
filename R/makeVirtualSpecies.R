@@ -63,11 +63,11 @@
 makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, species.type = "multiplicative", max.n = NULL){
 
   #carga librerías
-  require(raster)
-  require(virtualspecies)
-  require(viridis)
-  require(cowplot)
-  require(tidyverse, warn.conflicts = FALSE)
+  suppressPackageStartupMessages(require(raster))
+  suppressPackageStartupMessages(require(virtualspecies))
+  suppressPackageStartupMessages(require(viridis))
+  suppressPackageStartupMessages(require(cowplot))
+  suppressPackageStartupMessages(require(tidyverse, warn.conflicts = FALSE))
   ggplot2::theme_set(cowplot::theme_cowplot())
 
   #setting random seed
@@ -135,7 +135,8 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, 
   }
 
   #from list to data frame
-  response.curves <- data.frame(do.call("cbind", response.curves)) %>%
+  response.curves <-
+    data.frame(do.call("cbind", response.curves)) %>%
     tidyr::pivot_longer(
       cols = niche.dimensions,
       names_to = "variable",
@@ -208,7 +209,7 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, 
 
   #raster to dataframe for ggplotting
   niche.map.df <-
-    as.data.frame(virtual.species.temp$suitab.raster, xy = TRUE) %>%
+    raster::as.data.frame(virtual.species.temp$suitab.raster, xy = TRUE) %>%
     na.omit()
 
   #converts distribution to presence-absence
@@ -223,7 +224,7 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, 
 
   #checking that there are enough presences
   presence.cells <-
-    as.data.frame(virtual.species.temp$pa.raster, xy = TRUE) %>%
+    raster::as.data.frame(virtual.species.temp$pa.raster, xy = TRUE) %>%
     na.omit() %>%
     filter(layer == TRUE) %>%
     nrow()

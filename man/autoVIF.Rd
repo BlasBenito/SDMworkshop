@@ -21,10 +21,31 @@ Selects variables within a dataframe that are not correlated with each other, or
 }
 \examples{
 data("europe2000")
-df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11")]])
-selected.vars <- autoVIF(
+df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11", "bio12")]])
+selected.vars <- SDMworkshop::autoVIF(
  x = df,
  try.to.keep = c("bio5", "bio6", "bio1"),
+ verbose = TRUE
+)
+selected.vars
+
+#autoVIF can also take the output of corPB
+#as try.to.keep argument, as follows:
+data(presenceBackground)
+
+cPB <- SDMworkshop::corPB(
+x = presenceBackground,
+presence.column = "presence",
+variables = c("bio1", "bio5", "bio6")
+)
+
+#note that cPB$df$variable is ordered from
+#higher to lower biserial correlation
+#higher biserial correlation is linked
+#to higher predictive importance
+selected.vars <- SDMworkshop::autoVIF(
+ x = df,
+ try.to.keep = cPB$df$variable,
  verbose = TRUE
 )
 selected.vars

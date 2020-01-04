@@ -37,7 +37,7 @@ plotRaster(x, n = 100, opacity = 0.5, begin = 0, end = 1,
 A leaflet plot.
 }
 \description{
-Uses the \code{\link[leaflet]} library to plot a raster file, and overlayed points if the point coordinates are provided. Alternatively, it accepts a grouping vector for the points (useful to, for example, plot the presences of different species at once).
+Uses the \code{\link{leaflet}} library to plot a raster file, and overlayed points if the point coordinates are provided. Alternatively, it accepts a grouping vector for the points (useful to, for example, plot the presences of different species at once).
 
 plotRaster(
 x,

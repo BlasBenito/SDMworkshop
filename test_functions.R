@@ -95,3 +95,42 @@ selected.vars <- autoVIF(
   verbose = TRUE
   )
 selected.vars
+
+selected.vars <- autoVIF(
+  x = df,
+  try.to.keep = c("bio5", "bio6"),
+  verbose = TRUE
+)
+selected.vars
+
+# 5 testing corPB -------------------------------------------------------
+data(presenceBackground)
+cPB <- corPB(
+x = presenceBackground,
+presence.column = "presence",
+variables = c("bio1", "bio5", "bio6")
+)
+cPB
+
+#autoVIF can also take the output of corPB
+#as try.to.keep argument, as follows:
+data(presenceBackground)
+data("europe2000")
+df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11", "bio12")]])
+
+cPB <- SDMworkshop::corPB(
+x = presenceBackground,
+presence.column = "presence",
+variables = c("bio1", "bio5", "bio6", "bio11", "bio12")
+)
+
+#note that cPB$df$variable is ordered from
+#higher to lower biserial correlation
+#higher biserial correlation is linked
+#to higher predictive importance
+selected.vars <- SDMworkshop::autoVIF(
+ x = df,
+ try.to.keep = cPB$df$variable,
+ verbose = TRUE
+)
+selected.vars

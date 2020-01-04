@@ -12,10 +12,31 @@
 #'
 #' @examples
 #'data("europe2000")
-#'df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11")]])
-#'selected.vars <- autoVIF(
+#'df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11", "bio12")]])
+#'selected.vars <- SDMworkshop::autoVIF(
 #'  x = df,
 #'  try.to.keep = c("bio5", "bio6", "bio1"),
+#'  verbose = TRUE
+#')
+#'selected.vars
+#'
+#'#autoVIF can also take the output of corPB
+#'#as try.to.keep argument, as follows:
+#' data(presenceBackground)
+#'
+#' cPB <- SDMworkshop::corPB(
+#' x = presenceBackground,
+#' presence.column = "presence",
+#' variables = c("bio1", "bio5", "bio6")
+#' )
+#'
+#' #note that cPB$df$variable is ordered from
+#' #higher to lower biserial correlation
+#' #higher biserial correlation is linked
+#' #to higher predictive importance
+#' selected.vars <- SDMworkshop::autoVIF(
+#'  x = df,
+#'  try.to.keep = cPB$df$variable,
 #'  verbose = TRUE
 #')
 #'selected.vars
@@ -70,6 +91,7 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
         .vif2df(x = x[, selected.vars]) %>%
         dplyr::filter(vif > 5) %>%
         dplyr::filter(vif == max(vif)) %>%
+        dplyr::slice(1) %>%
         dplyr::select(variable) %>%
         as.character()
 
@@ -123,6 +145,7 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
         dplyr::inner_join(y = preference, by = "variable") %>%
         dplyr::filter(preference == max(preference)) %>%
         dplyr::filter(vif == max(vif))  %>%
+        dplyr::slice(1) %>%
         dplyr::select(variable) %>%
         as.character()
 
@@ -199,6 +222,7 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
         vif.df %>%
         dplyr::filter(!(variable %in% try.to.keep)) %>%
         dplyr::filter(vif == max(vif)) %>%
+        dplyr::slice(1) %>%
         dplyr::select(variable) %>%
         as.character()
 
