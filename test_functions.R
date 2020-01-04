@@ -91,7 +91,7 @@ data("europe2000")
 df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11")]])
 selected.vars <- autoVIF(
   x = df,
-  try.to.keep = c("bio5", "bio6", "bio1"),
+  try.to.keep = NULL,
   verbose = TRUE
   )
 selected.vars

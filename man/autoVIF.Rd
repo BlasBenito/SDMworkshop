@@ -9,9 +9,9 @@ autoVIF(x)
 \arguments{
 \item{x}{A data frame with numeric columns.}
 
-\item{try.to.keep}{A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables IN \code{try.to.keep}, then to the other variables available in \code{x}, and finally to the outcome of both vif analyses, always trying to remove variables not in \code{try.to.keep}. This option triggers a message on screen describing which variables are being removed on each step that can be shut down through the argument \code{verbose = TRUE}.}
+\item{try.to.keep}{A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables not in \code{x} that are not in \code{try.to.keep}, then to the variables in \code{try.to.keep}, and finally to the outcome of both vif analyses, while always trying to remove variables not in \code{try.to.keep}.}
 
-\item{verbose}{Boolean, defaults to TRUE. Triggers messages describing the actions of the function when \code{try.to.keep} is not \code{NULL}.}
+\item{verbose}{Boolean, defaults to TRUE. Triggers messages describing what variables are being removed.}
 }
 \value{
 A character vector with the names of the selected variables.
@@ -28,8 +28,6 @@ selected.vars <- autoVIF(
  verbose = TRUE
 )
 selected.vars
-
-
 
 }
 \author{
