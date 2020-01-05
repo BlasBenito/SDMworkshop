@@ -165,16 +165,17 @@
 #' @references Leroy B, Meynard CN, Bellard C, Courchamp F (2015). “virtualspecies, an R package to generate virtual species distributions.” Ecography. doi: 10.1111/ecog.01388.
 "virtualSpecies"
 
+
 #' Presence and background data for a virtual species
 #'
 #' Dataframe with 8344 observations and 34 variables containing presence records of a virtual species and background data. Each record contains the latitude, longitude, and values of 31 predictive variables, along with a presence column with 1 indicating presence, and 0 indicating background. This data is ready for model fitting.
 #'
 #' @docType data
 #' @keywords datasets
-#' @name presenceBackground
+#' @name virtualSpeciesPB
 #' @usage
-#' data(presenceBackground)
-#' names(presenceBackground)
+#' data(virtualSpeciesPB)
+#' names(virtualSpeciesPB)
 #'
 #' @format Data frame.
-"virtualSpecies"
+"virtualSpeciesPB"

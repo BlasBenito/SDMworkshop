@@ -104,9 +104,9 @@ selected.vars <- autoVIF(
 selected.vars
 
 # 5 testing corPB -------------------------------------------------------
-data(presenceBackground)
+data(virtualSpeciesPB)
 cPB <- corPB(
-x = presenceBackground,
+x = virtualSpeciesPB,
 presence.column = "presence",
 variables = c("bio1", "bio5", "bio6")
 )
@@ -114,12 +114,12 @@ cPB
 
 #autoVIF can also take the output of corPB
 #as try.to.keep argument, as follows:
-data(presenceBackground)
+data(virtualSpeciesPB)
 data("europe2000")
 df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11", "bio12")]])
 
 cPB <- SDMworkshop::corPB(
-x = presenceBackground,
+x = virtualSpeciesPB,
 presence.column = "presence",
 variables = c("bio1", "bio5", "bio6", "bio11", "bio12")
 )
@@ -134,3 +134,11 @@ selected.vars <- SDMworkshop::autoVIF(
  verbose = TRUE
 )
 selected.vars
+
+
+# 5 testing weightPB -------------------------------------------------------
+data("virtualSpeciesPB")
+weights <- weightPB(x = virtualSpeciesPB$presence)
+table(weights)
+
+weights <- weightPB(x = c(0, 1, 0, 1))
