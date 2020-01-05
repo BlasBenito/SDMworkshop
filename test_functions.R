@@ -37,7 +37,7 @@ rm(x)
 library(SDMworkshop)
 data("europe2000")
 plotRaster(
-  x = europe2000[["bio1"]],
+  variable = europe2000[["bio1"]],
   option = "B",
   opacity = 0.7
   )
@@ -142,3 +142,39 @@ weights <- weightPB(x = virtualSpeciesPB$presence)
 table(weights)
 
 weights <- weightPB(x = c(0, 1, 0, 1))
+
+# 5 testing autocor -------------------------------------------------------
+data("virtualSpecies")
+data(europe2000)
+sp.cor <- testSpatialCorrelation(
+  xy = virtualSpecies$observed.presence,
+  variables = europe2000
+  )
+sp.cor
+
+# 5 testing autocor -------------------------------------------------------
+data("virtualSpecies")
+data(europe2000)
+sp.cor <- reduceSpatialCorrelation(
+  xy = virtualSpecies$observed.presence,
+  variables = europe2000,
+  minimum.distance = 3,
+  random.start = TRUE,
+  seed = NULL,
+  verbose = TRUE
+)
+sp.cor
+nrow(virtualSpecies$observed.presence)
+nrow(sp.cor)
+
+plotRaster(
+  variable = europe2000[["bio1"]],
+  points.x = virtualSpecies$observed.presence$x,
+  points.y = virtualSpecies$observed.presence$y
+)
+
+plotRaster(
+  variable = europe2000[["bio1"]],
+  points.x = sp.cor$x,
+  points.y = sp.cor$y
+)

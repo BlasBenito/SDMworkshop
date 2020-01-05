@@ -4,12 +4,12 @@
 \alias{plotRaster}
 \title{Pretty plot of a raster file, and points if provided}
 \usage{
-plotRaster(x, n = 100, opacity = 0.5, begin = 0, end = 1,
+plotRaster(variable, n = 100, opacity = 0.5, begin = 0, end = 1,
   direction = 1, option = "D", points.x = NULL, points.y = NULL,
   points.groups = NULL, points.legend = "Points", points.size = 10)
 }
 \arguments{
-\item{x}{A raster object. It can be the subset of a brick, as in \code{x[["variable_name"]]}.}
+\item{variable}{A raster object. It can be the subset of a brick, as in \code{x[["variable_name"]]}. If an entire brick is provided, the first layer is used by default.}
 
 \item{n}{Number of colors (integer higher than 1) to use in the color palette. Argument of the \code{\link[viridis]{viridis}} function.}
 

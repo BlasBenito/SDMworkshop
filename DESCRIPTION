@@ -11,17 +11,6 @@ LazyData: true
 RoxygenNote: 6.1.1
 Depends: R (>= 3.5.0)
 Imports: 
-  plyr,
-  grDevices,
-  foreach,
-  parallel,
-  doParallel,
-  fields,
-  viridis,
-  RColorBrewer,
-  data.table,
-  iterators,
-  arrangements
 Suggests: 
   devtools,
   formatR,

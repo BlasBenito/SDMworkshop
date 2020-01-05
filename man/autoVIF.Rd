@@ -17,7 +17,7 @@ autoVIF(x)
 A character vector with the names of the selected variables.
 }
 \description{
-Selects variables within a dataframe that are not correlated with each other, or with linear combinations of other variables, by using the variance inflation factor (VIF) criteria implemented in the \code{\link[HH]{vif}} function.
+Selects variables within a dataframe that are not correlated with each other, or with linear combinations of other variables, by using the variance inflation factor (VIF) criteria implemented in the \code{\link[HH]{vif}} function (Heilberger and Holland 2004).
 }
 \examples{
 data("europe2000")
@@ -51,6 +51,9 @@ selected.vars <- SDMworkshop::autoVIF(
 selected.vars
 
 }
+\references{
+Heiberger, Richard M. and Holland, Burt (2004). Statistical Analysis and Data Display: An Intermediate Course with Examples in S-Plus, R, and SAS. Springer Texts in Statistics. Springer. ISBN 0-387-40270-5.
+}
 \author{
-Blas Benito <blasbenito@gmail.com>
+Blas Benito <blasbenito@gmail.com>. The function \code{\link[HH]{vif}} is authored by Richard M. Heiberger <rmh@temple.edu>.
 }

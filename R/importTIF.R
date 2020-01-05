@@ -20,7 +20,6 @@ importTIF <- function(folder, crs = "+init=epsg:4326", to.memory = TRUE){
 
   #loading required libraries
   require(raster)
-  require(sp)
 
   #generating stack
   x <- raster::stack(
@@ -40,7 +39,7 @@ importTIF <- function(folder, crs = "+init=epsg:4326", to.memory = TRUE){
   if(is.null(crs) == FALSE){
     if(is.na(crs) == FALSE){
       if(crs != "unknown"){
-        raster::projection(x) <- sp::CRS(crs)
+        raster::projection(x) <- raster::crs(crs)
         }
       }
     }

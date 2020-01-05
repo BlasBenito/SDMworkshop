@@ -16,7 +16,7 @@
 #'points.legend = "Points"
 #')
 #'
-#' @param x A raster object. It can be the subset of a brick, as in \code{x[["variable_name"]]}.
+#' @param variable A raster object. It can be the subset of a brick, as in \code{x[["variable_name"]]}. If an entire brick is provided, the first layer is used by default.
 #' @param n Number of colors (integer higher than 1) to use in the color palette. Argument of the \code{\link[viridis]{viridis}} function.
 #' @param opacity Transparency in the range [0, 1]. If close to 1, the underlying political map will remain hidden.
 #' @param begin Numeric in the range [0, 1], color at which the color palette starts.
@@ -44,14 +44,15 @@
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-plotRaster <- function(x, n = 100, opacity = 0.5, begin = 0, end = 1, direction = 1, option = "D", points.x = NULL, points.y = NULL, points.groups = NULL, points.legend = "Points", points.size = 10){
+plotRaster <- function(variable, n = 100, opacity = 0.5, begin = 0, end = 1, direction = 1, option = "D", points.x = NULL, points.y = NULL, points.groups = NULL, points.legend = "Points", points.size = 10){
 
   require(raster)
   require(leaflet)
   require(viridis)
 
-  #getting the values of x
-  x.values <- na.omit(raster::values(x))
+  #getting the values of variable
+  if(raster::nlayers(variable) > 1){variable <- variable[[1]]}
+  variable.values <- na.omit(raster::values(variable))
 
   #building color palette
   pal.raster <- leaflet::colorNumeric(
@@ -62,7 +63,7 @@ plotRaster <- function(x, n = 100, opacity = 0.5, begin = 0, end = 1, direction 
       direction = direction,
       option = option
       ),
-    domain = na.omit(unique(x.values)),
+    domain = na.omit(unique(variable.values)),
     na.color = "transparent"
   )
 
@@ -73,14 +74,14 @@ plotRaster <- function(x, n = 100, opacity = 0.5, begin = 0, end = 1, direction 
     leaflet() %>%
       addTiles() %>%
       addRasterImage(
-        x,
+        variable,
         colors = pal.raster,
         opacity = opacity
       ) %>%
       addLegend(
         pal = pal.raster,
-        values = x.values,
-        title = names(x)
+        values = variable.values,
+        title = names(variable)
       )
 
     #there are points to plot
@@ -106,14 +107,14 @@ plotRaster <- function(x, n = 100, opacity = 0.5, begin = 0, end = 1, direction 
       leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
       addRasterImage(
-        x,
+        variable,
         colors = pal.raster,
         opacity = 0.4
       ) %>%
       addLegend(
         pal = pal.raster,
-        values = x.values,
-        title = names(x),
+        values = variable.values,
+        title = names(variable),
         opacity = 1
       ) %>%
       addCircles(

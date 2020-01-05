@@ -9,18 +9,17 @@
 #' )
 #'
 #' @param folder Folder storing the .asc raster files.
-#' @param crs Character string defining a coordinate reference system as per the PROJ.4 standard. The default crs is \emph{"+init=epsg:4326"}, valid for data using latitude and longitude degrees as coordinates, and the global datum WGS84. Check the help file of \code{\link[sp]{CRS}} for further details. The argument can be set to NULL, or "unknown" if the coordinate reference system is unknown.
+#' @param crs Character string defining a coordinate reference system as per the PROJ.4 standard. The default crs is \emph{"+init=epsg:4326"}, valid for data using latitude and longitude degrees as coordinates, and the global datum WGS84. Check the help file of \code{\link[raster]{crs}} for further details. The argument can be set to NULL, or "unknown" if the coordinate reference system is unknown.
 #' @param to.memory If TRUE (default option), the function returns a raster brick residing in memory. Otherwise it returns a stack, which resides in the hard disk, and slows down most operations. If the computer has enough RAM memory, use TRUE to speed up any operation on the outcome of this function.
 #'
 #' @return A raster brick or stack.
 #'
-#' @author Blas Benito <blasbenito@gmail.com>
+#' @author Blas Benito <blasbenito@gmail.com>. The functions \code{\link[raster]{stack}}, \code{\link[raster]{brick}}, and \code{\link[raster]{crs}} are authored by Robert J. Hijmans.
 #' @export
 importASC <- function(folder, crs = "+init=epsg:4326", to.memory = TRUE){
 
   #loading required libraries
   require(raster)
-  require(sp)
 
   #generating stack
   x <- raster::stack(
@@ -40,7 +39,7 @@ importASC <- function(folder, crs = "+init=epsg:4326", to.memory = TRUE){
   if(is.null(crs) == FALSE){
     if(is.na(crs) == FALSE){
       if(crs != "unknown"){
-        raster::projection(x) <- sp::CRS(crs)
+        raster::projection(x) <- raster::crs(crs)
         }
       }
     }
