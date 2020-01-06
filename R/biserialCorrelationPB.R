@@ -2,7 +2,12 @@
 #'
 #' @description Computes the biserial correlation between presence and background data for a set of predictors. A high biserial correlation for a given predictor indicates that the distributions of the presence and background records are separated enough in the space of predictor values to suggest that the predictor is a good candidate for a species distribution model.
 #'
-#' @usage corPB(x, presence.column, variables)
+#' @usage biserialCorrelationPB(
+#'   x,
+#'   presence.column = "presence",
+#'   variables = NULL,
+#'   exclude.variables = NULL
+#')
 #'
 #' @param x A data frame with a presence column with 1 indicating presence and 0 indicating background, and columns with predictor values.
 #' @param presence.column Character, name of the presence column.
@@ -18,20 +23,16 @@
 #' The output data frame is ordered, starting with the higher R2 values.
 #'
 #' @examples
-#' data(presenceBackground)
-#' cPB <- corPB(
-#' x = presenceBackground,
-#' presence.column = "presence",
-#' variables = c("bio1", "bio5", "bio6")
+#' data(virtualSpeciesPB)
+#' cPB <- biserialCorrelationPB(
+#'   x = virtualSpeciesPB,
+#'   presence.column = "presence",
+#'   variables = c("bio1", "bio5", "bio6")
 #' )
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-corPB <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL){
-
-  #load variables
-  suppressPackageStartupMessages(require(tidyverse, warn.conflicts = FALSE))
-  suppressPackageStartupMessages(require(viridis))
+biserialCorrelationPB <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL){
 
   #geteting variables
   if(is.null(variables) == TRUE){

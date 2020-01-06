@@ -46,7 +46,7 @@ The function \code{\link[virtualspecies]{sampleOccurrences}} is configured as fo
 Please, check the help files of these three functions to better understand how they work!
 }
 \examples{
-
+\dontrun{
 data("europe2000")
 
 #niche parameters list
@@ -67,7 +67,7 @@ vs <- makeVirtualSpecies(
  species.type = "multiplicative",
  seed = NULL
 )
-
+}
 
 }
 \references{

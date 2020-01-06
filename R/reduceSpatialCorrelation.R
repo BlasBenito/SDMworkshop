@@ -2,7 +2,14 @@
 #'
 #' @description This function reduces the spatial clustering of a set of presence records. It is intended to reduce spatial autocorrelation, and reduce sampling bias, particularly at larger geographical scales. It takes as input a set of coordinates, a brick or stack of environmental variables, and a minimum distance, and returns a new set of coordinates in which the distance between adjacent points is equal or higher than the established minimum distance. This operation is named "thinning", and helps to reduce the spatial correlation of a presence dataset. This function applies thinning, but preserves the presence records representing the extremes of any of the predictive variables provided.
 #'
-#' @usage reduceSpatialCorrelation(xy, variables, minimum.distance = NULL, random.start = FALSE, seed = NULL, verbose = FALSE)
+#' @usage reduceSpatialCorrelation(
+#' xy,
+#' variables,
+#' minimum.distance = NULL,
+#' random.start = FALSE,
+#' seed = NULL,
+#' verbose = FALSE
+#' )
 #'
 #' @param xy A data frame with two columns with coordinates x and y. Column names are irrelevant as long as the first column represents the x coordinate, and the second column represents the y coordinate.
 #' @param variables A raster brick or stack with environmental variables. Must be in the same reference system of \code{xy}.

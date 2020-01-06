@@ -29,10 +29,6 @@
 #' @export
 testSpatialCorrelation <- function(xy, variables){
 
-  require(ape)
-  require(geosphere)
-  require(data.table)
-
   #removes scientific notation
   options(scipen = 9999)
 

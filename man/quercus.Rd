@@ -6,7 +6,7 @@
 \title{Dataframe with presence data of 8 Quercus species in Europe and 2000 true absences for all species.}
 \format{Data frame with 3 columns and 6946 rows.}
 \usage{
-data(quercus)
+quercus
 }
 \description{
 Dataframe with 3 columns and 6946 rows containing presence data of the species \emph{Quercus robur}, \emph{Quercus petraea}, \emph{Quercus ilex}, \emph{Quercus cerris}, \emph{Quercus pyrenaica}, \emph{Quercus faginea}, \emph{Quercus suber}, \emph{Quercus pubescens}, and \emph{Quercus robur}, and 2000 absences. The presence data has been extracted from the EU-Forest dataset (Mauri et al. 2017, \url{https://figshare.com/collections/A_high-resolution_pan-European_tree_occurrence_dataset/3288407}). Absences were defined at EU-Forest plots without any \emph{Quercus} species, and are therefore true absences.

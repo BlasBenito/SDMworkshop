@@ -2,7 +2,11 @@
 #'
 #' @description Selects variables within a dataframe that are not correlated with each other, or with linear combinations of other variables, by using the variance inflation factor (VIF) criteria implemented in the \code{\link[HH]{vif}} function (Heilberger and Holland 2004).
 #'
-#' @usage autoVIF(x)
+#' @usage autoVIF(
+#'   x,
+#'   try.to.keep = NULL,
+#'   verbose = TRUE
+#' )
 #'
 #' @param x A data frame with numeric columns.
 #' @param try.to.keep A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables not in \code{x} that are not in \code{try.to.keep}, then to the variables in \code{try.to.keep}, and finally to the outcome of both vif analyses, while always trying to remove variables not in \code{try.to.keep}.
@@ -11,6 +15,7 @@
 #' @return A character vector with the names of the selected variables.
 #'
 #' @examples
+#' \dontrun{
 #'data("europe2000")
 #'df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11", "bio12")]])
 #'selected.vars <- SDMworkshop::autoVIF(
@@ -22,10 +27,10 @@
 #'
 #'#autoVIF can also take the output of corPB
 #'#as try.to.keep argument, as follows:
-#' data(presenceBackground)
+#' data(virtualSpeciesPB)
 #'
-#' cPB <- SDMworkshop::corPB(
-#' x = presenceBackground,
+#' cPB <- SDMworkshop::biserialCorrelationPB(
+#' x = virtualSpeciesPB,
 #' presence.column = "presence",
 #' variables = c("bio1", "bio5", "bio6")
 #' )
@@ -41,31 +46,12 @@
 #')
 #'selected.vars
 #'
+#'}
+#'
 #' @author Blas Benito <blasbenito@gmail.com>. The function \code{\link[HH]{vif}} is authored by Richard M. Heiberger <rmh@temple.edu>.
 #' @references Heiberger, Richard M. and Holland, Burt (2004). Statistical Analysis and Data Display: An Intermediate Course with Examples in S-Plus, R, and SAS. Springer Texts in Statistics. Springer. ISBN 0-387-40270-5.
 #' @export
 autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
-
-  #loading libraries
-  suppressPackageStartupMessages(require(HH))
-  suppressPackageStartupMessages(require(tidyverse, warn.conflicts = FALSE))
-
-  #defines internal functions
-  #turns vif result into df
-  .vif2df <- function(x){
-
-    #selects var to remove
-    df <-
-      data.frame(
-        HH::vif(xx = x),
-        stringsAsFactors = FALSE
-      ) %>%
-      dplyr::rename(vif = 1) %>%
-      tibble::rownames_to_column(var = "variable") %>%
-      dplyr::arrange(dplyr::desc(vif))
-
-     return(df)
-  }
 
   #keeping numeric columns only and removing NA
   x <-
@@ -247,3 +233,19 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
 
 } #end of function
 
+
+#' @export
+.vif2df <- function(x){
+
+  #turns vif output into tidy df
+  df <-
+    data.frame(
+      HH::vif(xx = x),
+      stringsAsFactors = FALSE
+    ) %>%
+    dplyr::rename(vif = 1) %>%
+    tibble::rownames_to_column(var = "variable") %>%
+    dplyr::arrange(dplyr::desc(vif))
+
+  return(df)
+}

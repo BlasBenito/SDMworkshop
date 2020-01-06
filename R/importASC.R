@@ -18,9 +18,6 @@
 #' @export
 importASC <- function(folder, crs = "+init=epsg:4326", to.memory = TRUE){
 
-  #loading required libraries
-  require(raster)
-
   #generating stack
   x <- raster::stack(
     x  = list.files(

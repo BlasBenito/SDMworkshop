@@ -6,7 +6,7 @@
 \alias{SDMworkshop-package}
 \title{SDMworkshop: Streamlining the Development of Species Distribution Models}
 \description{
-Helps developing species distribution models (SDM) with functions to easily plot data, select variables, assess multicollinearity, etc etc
+Helps developing species distribution models with functions to easily plot data, select variables, evaluate spatial correlation, apply thinning to presence data. Furthermore, it provides functions to fit and evaluate different models.
 }
 \details{
 Details

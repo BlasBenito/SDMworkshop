@@ -2,18 +2,18 @@
 #'
 #' @description Uses the \code{\link{leaflet}} library to plot a raster file, and overlayed points if the point coordinates are provided. Alternatively, it accepts a grouping vector for the points (useful to, for example, plot the presences of different species at once).
 #'
-#'plotRaster(
-#'x,
-#'n = 100,
-#'opacity = 0.5,
-#'begin = 0,
-#'end = 1,
-#'direction = 1,
-#'option = "D",
-#'points.x = NULL,
-#'points.y = NULL,
-#'points.groups = NULL,
-#'points.legend = "Points"
+#'plotVariable(
+#'  variable,
+#'  n = 100,
+#'  opacity = 0.5,
+#'  begin = 0,
+#'  end = 1,
+#'  direction = 1,
+#'  option = "D",
+#'  points.x = NULL,
+#'  points.y = NULL,
+#'  points.groups = NULL,
+#'  points.legend = "Points"
 #')
 #'
 #' @param variable A raster object. It can be the subset of a brick, as in \code{x[["variable_name"]]}. If an entire brick is provided, the first layer is used by default.
@@ -33,8 +33,8 @@
 #' @examples
 #' data(virtualSpecies)
 #' data(europe2000)
-#'plotRaster(
-#'  x = europe2000[["bio1"]],
+#'plotVariable(
+#'  variable = europe2000[["bio1"]],
 #'  option = "B",
 #'  opacity = 0.7,
 #'  points.x = virtualSpecies$observed.presence$x,
@@ -44,11 +44,7 @@
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-plotRaster <- function(variable, n = 100, opacity = 0.5, begin = 0, end = 1, direction = 1, option = "D", points.x = NULL, points.y = NULL, points.groups = NULL, points.legend = "Points", points.size = 10){
-
-  require(raster)
-  require(leaflet)
-  require(viridis)
+plotVariable <- function(variable, n = 100, opacity = 0.5, begin = 0, end = 1, direction = 1, option = "D", points.x = NULL, points.y = NULL, points.groups = NULL, points.legend = "Points", points.size = 10){
 
   #getting the values of variable
   if(raster::nlayers(variable) > 1){variable <- variable[[1]]}

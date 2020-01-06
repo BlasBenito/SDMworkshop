@@ -34,7 +34,7 @@
 #' Please, check the help files of these three functions to better understand how they work!
 #'
 #' @examples
-#'
+#'\dontrun{
 #' data("europe2000")
 #'
 #'#niche parameters list
@@ -55,20 +55,12 @@
 #'  species.type = "multiplicative",
 #'  seed = NULL
 #')
-#'
+#'}
 #'
 #' @author Blas Benito <blasbenito@gmail.com>. The functions \code{\link[virtualspecies]{generateSpFromFun}}, \code{\link[virtualspecies]{convertToPA}}, and \code{\link[virtualspecies]{sampleOccurrences}} are authored by Boris Leroy <leroy.boris@gmail.com>, with help from C. N. Meynard, C. Bellard & F. Courchamp
 #' @references Leroy, B., Meynard, C.N., Bellard, C. and Courchamp, F. (2016), virtualspecies, an R package to generate virtual species distributions. Ecography, 39: 599-607. doi:10.1111/ecog.01388
 #' @export
 makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, species.type = "multiplicative", max.n = NULL){
-
-  #carga librerías
-  suppressPackageStartupMessages(require(raster))
-  suppressPackageStartupMessages(require(virtualspecies))
-  suppressPackageStartupMessages(require(viridis))
-  suppressPackageStartupMessages(require(cowplot))
-  suppressPackageStartupMessages(require(tidyverse, warn.conflicts = FALSE))
-  ggplot2::theme_set(cowplot::theme_cowplot())
 
   #setting random seed
   if(is.null(seed) == FALSE){
@@ -226,7 +218,7 @@ makeVirtualSpecies <- function(variables, niche.parameters = NULL, seed = NULL, 
   presence.cells <-
     raster::as.data.frame(virtual.species.temp$pa.raster, xy = TRUE) %>%
     na.omit() %>%
-    filter(layer == TRUE) %>%
+    dplyr::filter(layer == TRUE) %>%
     nrow()
 
   #adjusting n

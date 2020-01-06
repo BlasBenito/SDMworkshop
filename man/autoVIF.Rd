@@ -4,7 +4,11 @@
 \alias{autoVIF}
 \title{Automatic variable selection with variance inflation factor (VIF) analysis}
 \usage{
-autoVIF(x)
+autoVIF(
+  x,
+  try.to.keep = NULL,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{x}{A data frame with numeric columns.}
@@ -20,6 +24,7 @@ A character vector with the names of the selected variables.
 Selects variables within a dataframe that are not correlated with each other, or with linear combinations of other variables, by using the variance inflation factor (VIF) criteria implemented in the \code{\link[HH]{vif}} function (Heilberger and Holland 2004).
 }
 \examples{
+\dontrun{
 data("europe2000")
 df <- raster::as.data.frame(europe2000[[c("bio1", "bio5", "bio6", "bio11", "bio12")]])
 selected.vars <- SDMworkshop::autoVIF(
@@ -31,10 +36,10 @@ selected.vars
 
 #autoVIF can also take the output of corPB
 #as try.to.keep argument, as follows:
-data(presenceBackground)
+data(virtualSpeciesPB)
 
-cPB <- SDMworkshop::corPB(
-x = presenceBackground,
+cPB <- SDMworkshop::biserialCorrelationPB(
+x = virtualSpeciesPB,
 presence.column = "presence",
 variables = c("bio1", "bio5", "bio6")
 )
@@ -49,6 +54,8 @@ selected.vars <- SDMworkshop::autoVIF(
  verbose = TRUE
 )
 selected.vars
+
+}
 
 }
 \references{

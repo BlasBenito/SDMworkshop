@@ -6,9 +6,7 @@
 \title{Predictive variables for Europe representing current times.}
 \format{Raster brick with 31 layers.}
 \usage{
-library(raster)
-data(europe2000)
-plot(europe2000)
+europe2000
 }
 \description{
 Raster brick with predictive variables to fit species distribution models for the European territory at ~20km resolution and reference system WGS84 (units are degrees of latitude and longitude, EPSG is 4326).

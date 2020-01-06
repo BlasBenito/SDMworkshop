@@ -6,22 +6,10 @@
 \title{Named list describing a virtual species.}
 \format{Named list.}
 \usage{
-data(virtualSpecies)
-names(virtualSpecies)
-
-#getting presences
-xy <- virtualSpecies$observed.presence
-
-#plotting niche plot
-library(ggplot2)
-virtualSpecies$niche.plot
-
-#plotting suitability raster
-library(raster)
-plot(virtualSpecies$suitability)
+virtualSpecies
 }
 \description{
-Named list with 5 named slots containing a description of a virtual species generated with the function \code{\link{generateVirtualSpecies}}, which depends on the function \code{\link[virtualspecies]{generateSpFromFun}} (Leroy et al. 2015).
+Named list with 5 named slots containing a description of a virtual species generated with the function \code{\link{makeVirtualSpecies}}, which depends on the function \code{\link[virtualspecies]{generateSpFromFun}} (Leroy et al. 2015).
 The list slots are:
 \itemize{
   \item \emph{niche.dimensions}: vector with the names of the variables in \code{\link{europe2000}} used to define the ecological niche of the virtual species.

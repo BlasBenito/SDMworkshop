@@ -113,4 +113,4 @@ background$presence <- 0
 
 presenceBackground <- rbind(xy, background)
 
-save(presenceBackground, file = "data/presenceBackground.RData")
+save(presenceBackground, file = "data/presenceBackground.rda")

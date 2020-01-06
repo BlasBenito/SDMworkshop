@@ -6,9 +6,7 @@
 \title{Predictive variables for Europe representing climatic conditions during the Last Glacial Maximum (21 ka BP).}
 \format{Raster brick with 19 layers.}
 \usage{
-library(raster)
-data(europe21kBP)
-plot(europe21kBP)
+europe21kBP
 }
 \description{
 Raster brick with predictive variables to fit species distribution models for the European territory at ~20km resolution and reference system WGS84 (units are degrees of latitude and longitude, EPSG is 4326).

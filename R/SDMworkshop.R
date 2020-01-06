@@ -57,10 +57,6 @@
 #' @docType data
 #' @keywords datasets
 #' @name europe2000
-#' @usage
-#' library(raster)
-#' data(europe2000)
-#' plot(europe2000)
 #' @format Raster brick with 31 layers.
 #' @references Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis, 2005. Very high resolution interpolated climate surfaces for global land areas. International Journal of Climatology 25: 1965-1978.
 #' @references Sanderson, E.W., Jaiteh, M., Levy, M.A., Redford, K.H., Wannebo, A.V., Woolmer, G. (2002) The Human Footprint and the Last of the Wild: The human footprint is a global map of human influence on the land surface, which suggests that human beings are stewards of nature, whether we like it or not, BioScience, Volume 52, Issue 10, October 2002, Pages 891–904, https://doi.org/10.1641/0006-3568(2002)052[0891:THFATL]2.0.CO;2
@@ -103,10 +99,6 @@
 #' @docType data
 #' @keywords datasets
 #' @name europe21kBP
-#' @usage
-#' library(raster)
-#' data(europe21kBP)
-#' plot(europe21kBP)
 #' @format Raster brick with 19 layers.
 #' @references Hijmans, R.J., S.E. Cameron, J.L. Parra, P.G. Jones and A. Jarvis, 2005. Very high resolution interpolated climate surfaces for global land areas. International Journal of Climatology 25: 1965-1978.
 "europe21kBP"
@@ -125,8 +117,6 @@
 #' @docType data
 #' @keywords datasets
 #' @name quercus
-#' @usage
-#' data(quercus)
 #' @format Data frame with 3 columns and 6946 rows.
 #' @references Mauri, A., Strona, G. & San-Miguel-Ayanz, J. (2017) EU-Forest, a high-resolution tree occurrence dataset for Europe. Scientific Data 4, 160123 doi:10.1038/sdata.2016.123
 "quercus"
@@ -134,7 +124,7 @@
 
 #' Named list describing a virtual species.
 #'
-#' Named list with 5 named slots containing a description of a virtual species generated with the function \code{\link{generateVirtualSpecies}}, which depends on the function \code{\link[virtualspecies]{generateSpFromFun}} (Leroy et al. 2015).
+#' Named list with 5 named slots containing a description of a virtual species generated with the function \code{\link{makeVirtualSpecies}}, which depends on the function \code{\link[virtualspecies]{generateSpFromFun}} (Leroy et al. 2015).
 #' The list slots are:
 #' \itemize{
 #'   \item \emph{niche.dimensions}: vector with the names of the variables in \code{\link{europe2000}} used to define the ecological niche of the virtual species.
@@ -147,20 +137,6 @@
 #' @docType data
 #' @keywords datasets
 #' @name virtualSpecies
-#' @usage
-#' data(virtualSpecies)
-#' names(virtualSpecies)
-#'
-#' #getting presences
-#' xy <- virtualSpecies$observed.presence
-#'
-#' #plotting niche plot
-#' library(ggplot2)
-#' virtualSpecies$niche.plot
-#'
-#' #plotting suitability raster
-#' library(raster)
-#' plot(virtualSpecies$suitability)
 #' @format Named list.
 #' @references Leroy B, Meynard CN, Bellard C, Courchamp F (2015). “virtualspecies, an R package to generate virtual species distributions.” Ecography. doi: 10.1111/ecog.01388.
 "virtualSpecies"
@@ -173,9 +149,23 @@
 #' @docType data
 #' @keywords datasets
 #' @name virtualSpeciesPB
-#' @usage
-#' data(virtualSpeciesPB)
-#' names(virtualSpeciesPB)
-#'
 #' @format Data frame.
 "virtualSpeciesPB"
+
+#' @import tidyr tibble dplyr ggplot2 leaflet virtualspecies
+NULL
+
+#' @import utils
+utils::globalVariables(c("vif", "variable", "presence", "value", "layer", "R2", "x", "y"))
+
+#' Pipe operator
+#'
+#' See \code{magrittr::\link[magrittr]{\%>\%}} for details.
+#'
+#' @name %>%
+#' @rdname pipe
+#' @keywords internal
+#' @export
+#' @importFrom magrittr %>%
+#' @usage lhs \%>\% rhs
+NULL

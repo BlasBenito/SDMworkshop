@@ -4,7 +4,14 @@
 \alias{reduceSpatialCorrelation}
 \title{Applies "thinning" to a set of coordinates to reduce their spatial correlation}
 \usage{
-reduceSpatialCorrelation(xy, variables, minimum.distance = NULL, random.start = FALSE, seed = NULL, verbose = FALSE)
+reduceSpatialCorrelation(
+xy,
+variables,
+minimum.distance = NULL,
+random.start = FALSE,
+seed = NULL,
+verbose = FALSE
+)
 }
 \arguments{
 \item{xy}{A data frame with two columns with coordinates x and y. Column names are irrelevant as long as the first column represents the x coordinate, and the second column represents the y coordinate.}
