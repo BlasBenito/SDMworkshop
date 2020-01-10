@@ -1,0 +1,274 @@
+#' Prepares training data for SDMs
+#'
+#' @description Produces "presence-only", "background" and "restricted background" data to fit species distribution models. The background is selected within the provided raster brick or stack, while the restricted background is selected within a buffer (usually based on the maximum dispersal distance of the target species) around the presence records. The function can also apply thinning to the presence coordinates to reduce spatial autocorrelation through the function \code{\link{reduceSpatialCorrelation}}.
+#'
+#' @usage prepareTrainingData(
+#'   xy,
+#'   variables,
+#'   n = 10000,
+#'   presence.only = FALSE,
+#'   background = TRUE,
+#'   restricted.background = FALSE,
+#'   restricted.background.buffer = 200,
+#'   plot = TRUE,
+#'   thinning = FALSE,
+#'   minimum.distance = raster::xres(variables)
+#'   )
+#'
+#' @param xy A data frame with two columns with coordinates x and y representing presence records. Column names are irrelevant as long as the first column represents the x coordinate, and the second column represents the y coordinate.
+#' @param variables A raster brick or stack with environmental variables. Must be in the same reference system of \code{xy}.
+#' @param n Integer, number of background points to generate. To generate pseudo-absences just define a low n (i.e. twice the number of presences).
+#' @param presence.only Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns presence-only data.
+#' @param background Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns background data generated to the extension of \code{variables}.
+#' @param restricted.background Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns restricted background data generated within a buffer of width equeal to \code{restricted.background.buffer} around the presence records \code{xy}.
+#' @param restricted.background.buffer Integer, buffer in kilometres around \code{xy} over which to define the buffer delimiting the restricted background.
+#' @param plot Boolean. If \code{TRUE}, the output data is plotted.
+#' @param thinning Boolean. If \code{TRUE}, the function \code{\link{reduceSpatialCorrelation}} is applied to \code{xy} to reduce the spatial aggregation of the data.
+#' @param minimum.distance Numeric, minimum distance between consecutive points in the output dataset. Defaults to the resolution of \code{variables}. The minimum distance can be extracted from the resolution of \code{variables}, as in  \code{minimum.distance <- xres(variables)}.
+#'
+#' @return A data frame ready to fit an species distribution model.
+#'
+#' @examples
+#' \dontrun{
+#' data(virtualSpecies)
+#' data(europe2000)
+#'
+#' #presence-only data
+#' presence.only <- prepareTrainingData(
+#'   xy = virtualSpecies$observed.presence,
+#'   variables = europe2000,
+#'   n,
+#'   presence.only = TRUE,
+#'   plot = TRUE
+#' )
+#'
+#' #background
+#' background <- prepareTrainingData(
+#'   xy = virtualSpecies$observed.presence,
+#'   variables = europe2000,
+#'   n,
+#'   background = TRUE,
+#'   plot = TRUE
+#' )
+#'
+#' #restricted background
+#' restricted.background <- prepareTrainingData(
+#'   xy = virtualSpecies$observed.presence,
+#'   variables = europe2000,
+#'   n,
+#'   restricted.background = TRUE,
+#'   restricted.background.buffer = 100,
+#'   plot = TRUE
+#' )
+#'
+#' #applying thinning
+#' restricted.background <- prepareTrainingData(
+#'   xy = virtualSpecies$observed.presence,
+#'   variables = europe2000,
+#'   n = 1000,
+#'   restricted.background = TRUE,
+#'   restricted.background.buffer = 100,
+#'   plot = TRUE,
+#'   thinning = TRUE,
+#'   minimum.distance = raster::xres(europe2000)
+#')
+#'}
+#'
+#' @author Blas Benito <blasbenito@gmail.com>.
+#' @export
+prepareTrainingData <- function(
+  xy,
+  variables,
+  n = 10000,
+  presence.only = FALSE,
+  background = TRUE,
+  restricted.background = FALSE,
+  restricted.background.buffer = 200,
+  plot = TRUE,
+  thinning = FALSE,
+  minimum.distance = raster::xres(variables)
+  ){
+
+  #setting switches
+  #--------------
+  if(presence.only == TRUE){
+    background <- restricted.background <- FALSE
+  }
+  if(restricted.background == TRUE){
+    background <- FALSE
+  }
+  if(background == TRUE){
+    restricted.background <- FALSE
+  }
+
+  #setting n
+  #----------------
+  #coercing to integer
+  n <- as.integer(n)
+
+  #removing duplicates
+  #------------------
+  xy <- xy[!duplicated(xy), ]
+
+  #doing thinning
+  #---------------
+  if(thinning == TRUE){
+    xy <- SDMworkshop::reduceSpatialCorrelation(
+      xy = xy,
+      variables = variables,
+      minimum.distance = minimum.distance
+    )
+  }
+
+  #preparing presence
+  #------------------
+  presence <- data.frame(
+    xy,
+    raster::extract(
+      x = variables,
+      y = xy,
+      df = TRUE,
+      cellnumbers = FALSE
+    )
+  )
+  presence$ID <- NULL
+
+  #añadimos columna de presencia (presencia = 1)
+  presence$presence <- 1
+
+
+  #preparing background
+  #-------------------
+  if(background == TRUE){
+
+    #getting background coordinates
+    background <- data.frame(
+      dismo::randomPoints(
+        mask = variables,
+        n = n
+      )
+    )
+
+    #keeping points with extreme values of the variables
+    for(variable in names(variables)){
+
+      #finding coordinates of cell with minimum value
+      xy.min <- raster::xyFromCell(
+        object = variables,
+        cell = raster::which.min(variables[[variable]])[1]
+      )
+
+      #finding coordinates of cell with maximum value
+      xy.max <- raster::xyFromCell(
+        object = variables,
+        cell = raster::which.max(variables[[variable]])[1]
+      )
+
+      #joining with background
+      background <- rbind(background, xy.min, xy.max)
+    }
+
+    #removing duplicates
+    background <- background[!duplicated(background), ]
+
+    #adding variable values
+    background <- data.frame(
+      background,
+      raster::extract(
+        x = variables,
+        y = background,
+        df = TRUE,
+        cellnumbers = FALSE
+      )
+    )
+    background$ID <- NULL
+
+    #adding presence column
+    background$presence <- 0
+
+    #merging data
+    presence <- rbind(presence, background)
+
+  }
+
+  #preparing restricted background
+  #-------------------------------
+  if(restricted.background == TRUE){
+
+    #coercing to integer
+    restricted.background.buffer <- as.integer(restricted.background.buffer)
+
+    #changing names of xy
+    colnames(xy) <- c("x", "y")
+
+    #xy to sp
+    sp::coordinates(xy) <- c("x", "y")
+    raster::crs(xy) <- raster::crs(variables)
+
+    #generates buffer
+    buffer <- dismo::circles(
+      p = xy,
+      d = restricted.background.buffer * 1000
+      )
+    buffer.dissolve <- rgeos::gUnaryUnion(buffer@polygons)
+
+    #gets IDs of cells within the buffer
+    buffer.cells <- unlist(
+      raster::cellFromPolygon(
+        object = variables,
+        p = buffer.dissolve
+        )
+      )
+
+    #generates mask from buffer cells
+    buffer.mask <- raster::raster(variables[[1]])
+    buffer.values <- rep(NaN, raster::ncell(buffer.mask))
+    buffer.values[buffer.cells] <- 1
+    buffer.mask <- raster::setValues(buffer.mask, values = buffer.values)
+    buffer.mask <- raster::mask(buffer.mask, mask = variables[[1]])
+
+    #generates background
+    restricted.background <- data.frame(
+      dismo::randomPoints(
+        mask = buffer.mask,
+        n = n
+        )
+      )
+
+    #removing duplicates
+    restricted.background <- restricted.background[!duplicated(restricted.background), ]
+
+    #adding variable values
+    restricted.background <- data.frame(
+      restricted.background,
+      raster::extract(
+        x = variables,
+        y = restricted.background,
+        df = TRUE,
+        cellnumbers = FALSE
+      )
+    )
+    restricted.background$ID <- NULL
+
+    #adding presence column
+    restricted.background$presence <- 0
+
+    #merging data
+    presence <- rbind(presence, restricted.background)
+
+  }
+
+  #plotting presence pattern
+  if(plot == TRUE){
+   x <- SDMworkshop::plotVariable(
+      variable = variables[[1]],
+      points.x = rev(presence$x),
+      points.y = rev(presence$y),
+      points.groups = rev(presence$presence)
+    )
+   print(x)
+  }
+
+  return(presence)
+
+}

@@ -24,7 +24,10 @@ Imports:
     virtualspecies,
     viridis,
     cowplot,
-    magrittr
+    magrittr,
+    dismo,
+    rgeos,
+    sp
 Suggests: 
     devtools,
     formatR,

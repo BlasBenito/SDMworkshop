@@ -13,8 +13,8 @@
 #'
 #' @param xy A data frame with two columns with coordinates x and y. Column names are irrelevant as long as the first column represents the x coordinate, and the second column represents the y coordinate.
 #' @param variables A raster brick or stack with environmental variables. Must be in the same reference system of \code{xy}.
-#' @param minimum.distance Numeric, minimum distance between consecutive points in the output dataset. Defaults to the resolution of \code{variables}. The minimum distance can be extracted from the resolution of \code{variables}, as in  \code{min.dist <- xres(variables)}.
-#' @param random.start Boolean, defaults to \code{FALSE}). If \code{TRUE}, the \code{xy} dataset is randomly reshuffled so the start of the thinning changes, and with that, the output dataset.
+#' @param minimum.distance Numeric, minimum distance between consecutive points in the output dataset. Defaults to the resolution of \code{variables}. The minimum distance can be extracted from the resolution of \code{variables}, as in  \code{minimum.distance <- xres(variables)}.
+#' @param random.start Boolean, defaults to \code{FALSE}. If \code{TRUE}, the \code{xy} dataset is randomly reshuffled so the start of the thinning changes, and with that, the output dataset.
 #' @param seed Integer determining a random seed. Only relevant when \code{random.start = TRUE}. Added to allow reproducibility in the generation of datasets with a random start.
 #' @param verbose Boolean. If \code{FALSE} (default), all messages are supressed.
 #'
@@ -52,9 +52,13 @@ reduceSpatialCorrelation = function(xy, variables, minimum.distance = NULL, rand
   old.column.names <- names(xy)
   names(xy) <- c("x", "y")
 
+  #removes duplicates
+  xy <- xy[!duplicated(xy), ]
+
   #computes minimum distance between points
-  if(is.null(minimum.distance) == TRUE){minimum.distance <- raster::xres(variables)}
-  min.dist = raster::xres(variables) * minimum.distance
+  if(is.null(minimum.distance) == TRUE){
+    minimum.distance <- raster::xres(variables)
+    }
 
   #extracts variable values for xy
   xy <- na.omit(
@@ -102,10 +106,10 @@ reduceSpatialCorrelation = function(xy, variables, minimum.distance = NULL, rand
     f <- xy[row, ]
 
     #generates a bounding box around the record
-    ymax <- f$y + min.dist
-    ymin <- f$y - min.dist
-    xmax <- f$x + min.dist
-    xmin <- f$x - min.dist
+    ymax <- f$y + minimum.distance
+    ymin <- f$y - minimum.distance
+    xmax <- f$x + minimum.distance
+    xmin <- f$x - minimum.distance
 
     #selects other records within the bounding box and removes them
     xy <- xy[!((xy$y <= ymax) & (xy$y >= ymin) & (xy$x <= xmax) & (xy$x >= xmin) & (xy$y != f$y | xy$x != f$x)), ]

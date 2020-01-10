@@ -166,6 +166,7 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
         "in the argument try.to.keep are not column names of x."
         ) %>%
         message()
+      stop()
     } else {
       paste(
         "The variables",
@@ -176,6 +177,7 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
         "in the argument try.to.keep are not column names of x."
         ) %>%
         message()
+      stop()
     }
   } #end of "identifies badly defined variables"
 

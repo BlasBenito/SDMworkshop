@@ -33,10 +33,10 @@ x <- importASC(
 rm(x)
 
 
-# 2 testing plotRaster ----------------------------------------------------
+# 2 testing plotVariable ----------------------------------------------------
 library(SDMworkshop)
 data("europe2000")
-plotRaster(
+plotVariable(
   variable = europe2000[["bio1"]],
   option = "B",
   opacity = 0.7
@@ -44,7 +44,7 @@ plotRaster(
 
 #plotting points
 data(virtualSpecies)
-plotRaster(
+plotVariable(
   x = europe2000[["bio1"]],
   option = "B",
   opacity = 0.7,
@@ -152,7 +152,6 @@ sp.cor <- testSpatialCorrelation(
   )
 sp.cor
 
-# 5 testing autocor -------------------------------------------------------
 data("virtualSpecies")
 data(europe2000)
 sp.cor <- reduceSpatialCorrelation(
@@ -167,14 +166,55 @@ sp.cor
 nrow(virtualSpecies$observed.presence)
 nrow(sp.cor)
 
-plotRaster(
+plotVariable(
   variable = europe2000[["bio1"]],
   points.x = virtualSpecies$observed.presence$x,
   points.y = virtualSpecies$observed.presence$y
 )
 
-plotRaster(
+plotVariable(
   variable = europe2000[["bio1"]],
   points.x = sp.cor$x,
   points.y = sp.cor$y
+)
+
+
+# 6 prepareTrainingData -------------------------------------------------------
+data("virtualSpecies")
+data(europe2000)
+presence.only <- prepareTrainingData(
+  xy = virtualSpecies$observed.presence,
+  variables = europe2000,
+  presence.only = TRUE
+)
+
+#background
+background <- prepareTrainingData(
+  xy = virtualSpecies$observed.presence,
+  variables = europe2000,
+  n = 1000,
+  background = TRUE,
+  plot = TRUE
+)
+
+#restricted background
+restricted.background <- prepareTrainingData(
+  xy = virtualSpecies$observed.presence,
+  variables = europe2000,
+  n = 1000,
+  restricted.background = TRUE,
+  restricted.background.buffer = 100,
+  plot = TRUE
+)
+
+#with thinning
+restricted.background <- prepareTrainingData(
+  xy = virtualSpecies$observed.presence,
+  variables = europe2000,
+  n = 1000,
+  restricted.background = TRUE,
+  restricted.background.buffer = 100,
+  plot = TRUE,
+  thinning = TRUE,
+  minimum.distance = raster::xres(europe2000)
 )

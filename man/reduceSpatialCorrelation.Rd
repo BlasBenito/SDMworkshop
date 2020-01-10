@@ -18,9 +18,9 @@ verbose = FALSE
 
 \item{variables}{A raster brick or stack with environmental variables. Must be in the same reference system of \code{xy}.}
 
-\item{minimum.distance}{Numeric, minimum distance between consecutive points in the output dataset. Defaults to the resolution of \code{variables}. The minimum distance can be extracted from the resolution of \code{variables}, as in  \code{min.dist <- xres(variables)}.}
+\item{minimum.distance}{Numeric, minimum distance between consecutive points in the output dataset. Defaults to the resolution of \code{variables}. The minimum distance can be extracted from the resolution of \code{variables}, as in  \code{minimum.distance <- xres(variables)}.}
 
-\item{random.start}{Boolean, defaults to \code{FALSE}). If \code{TRUE}, the \code{xy} dataset is randomly reshuffled so the start of the thinning changes, and with that, the output dataset.}
+\item{random.start}{Boolean, defaults to \code{FALSE}. If \code{TRUE}, the \code{xy} dataset is randomly reshuffled so the start of the thinning changes, and with that, the output dataset.}
 
 \item{seed}{Integer determining a random seed. Only relevant when \code{random.start = TRUE}. Added to allow reproducibility in the generation of datasets with a random start.}
 

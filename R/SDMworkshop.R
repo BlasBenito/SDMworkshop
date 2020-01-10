@@ -152,7 +152,7 @@
 #' @format Data frame.
 "virtualSpeciesPB"
 
-#' @import tidyr tibble dplyr ggplot2 leaflet virtualspecies
+#' @import tibble dplyr ggplot2 leaflet virtualspecies
 NULL
 
 #' @import utils
