@@ -2,6 +2,7 @@
 
 export("%>%")
 export(.vif2df)
+export(autoSelectVariables)
 export(autoVIF)
 export(biserialCorrelationPB)
 export(importASC)

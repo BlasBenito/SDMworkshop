@@ -42,7 +42,7 @@ prepareTrainingData(
 A data frame ready to fit an species distribution model.
 }
 \description{
-Produces "presence-only", "background" and "restricted background" data to fit species distribution models. The background is selected within the provided raster brick or stack, while the restricted background is selected within a buffer (usually based on the maximum dispersal distance of the target species) around the presence records. The function can also apply thinning to the presence coordinates to reduce spatial autocorrelation through the function \code{\link{reduceSpatialCorrelation}}.
+Produces "presence-only", "background" and "restricted background" data to fit species distribution models. The background is selected at random within the provided raster brick or stack, while the restricted background is selected within a buffer (usually based on the maximum dispersal distance of the target species) around the presence records. The selection of background points is made by the function \code{\raster[dismo]{randomPoints}}, from the \code{dismo} package (Hijmans et al. 2017). The function can also apply thinning to the presence coordinates to reduce spatial autocorrelation through the function \code{\link{reduceSpatialCorrelation}}. To produce pseudo-absences instead of background data, just reduce the argument \code{n} to a number between the number and presences and twice the number of presences.
 }
 \examples{
 \dontrun{
@@ -91,6 +91,9 @@ restricted.background <- prepareTrainingData(
 }
 
 }
+\references{
+Robert J. Hijmans, Steven Phillips, John Leathwick and Jane Elith (2017). dismo: Species Distribution Modeling. R package version 1.1-4. https://CRAN.R-project.org/package=dismo
+}
 \author{
-Blas Benito <blasbenito@gmail.com>.
+Blas Benito <blasbenito@gmail.com>. The function \code{\link[dismo]{randomPoints}} is authored by Robert J. Hijmans.
 }

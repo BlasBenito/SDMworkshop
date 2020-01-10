@@ -6,13 +6,15 @@
 #'   x,
 #'   presence.column = "presence",
 #'   variables = NULL,
-#'   exclude.variables = NULL
+#'   exclude.variables = NULL,
+#'   plot = TRUE
 #')
 #'
 #' @param x A data frame with a presence column with 1 indicating presence and 0 indicating background, and columns with predictor values.
 #' @param presence.column Character, name of the presence column.
 #' @param variables Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.
 #' @param exclude.variables Character vector, variables to exclude from the analysis.
+#' @param plot Boolean, prints biserial correlation plot if \code{TRUE}.
 #'
 #' @return A named list with two slots named \code{plot} and \code{df}. The former contains a ggplot object with the biserial correlation analysis. The latter is a data frame with the following columns:
 #' \itemize{
@@ -32,9 +34,9 @@
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-biserialCorrelationPB <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL){
+biserialCorrelationPB <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
 
-  #geteting variables
+  #getting variables
   if(is.null(variables) == TRUE){
     variables <- colnames(x)[colnames(x) != presence.column]
     if(is.null(exclude.variables) == FALSE){
@@ -65,7 +67,7 @@ biserialCorrelationPB <- function(x, presence.column = "presence", variables = N
   x.long[, presence.column] <- factor(x.long[, presence.column])
 
   #plotea primero
-  biserial.plot <- ggplot(
+  biserial.plot <- ggplot2::ggplot(
     data = x.long,
     aes(
       x = presence,
@@ -74,25 +76,27 @@ biserialCorrelationPB <- function(x, presence.column = "presence", variables = N
       color = presence
     )
   ) +
-    geom_point(
+    ggplot2::geom_point(
       alpha = 0.05,
       size = 3
     ) +
-    facet_wrap("variable", scales = "free") +
+    ggplot2::facet_wrap("variable", scales = "free") +
     viridis::scale_color_viridis(
       discrete = TRUE,
       direction = -1
     ) +
-    geom_smooth(
+    ggplot2::geom_smooth(
       method = "lm",
       size = 2,
       color = viridis::viridis(1, begin = 0.5)) +
-    guides(colour = guide_legend(override.aes = list(alpha = 1))) +
-    ylab("Variable") +
-    xlab("Presence")
+    ggplot2::guides(colour = guide_legend(override.aes = list(alpha = 1))) +
+    ggplot2::ylab("Variable") +
+    ggplot2::xlab("Presence")
 
   #prints plot to screen
-  print(biserial.plot)
+  if(plot == TRUE){
+    print(biserial.plot)
+  }
 
   #dataframe to store results
   biserial.correlation <- data.frame(

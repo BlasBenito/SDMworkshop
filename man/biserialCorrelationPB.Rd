@@ -8,7 +8,8 @@ biserialCorrelationPB(
   x,
   presence.column = "presence",
   variables = NULL,
-  exclude.variables = NULL
+  exclude.variables = NULL,
+  plot = TRUE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ biserialCorrelationPB(
 \item{variables}{Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.}
 
 \item{exclude.variables}{Character vector, variables to exclude from the analysis.}
+
+\item{plot}{Boolean, prints biserial correlation plot if \code{TRUE}.}
 }
 \value{
 A named list with two slots named \code{plot} and \code{df}. The former contains a ggplot object with the biserial correlation analysis. The latter is a data frame with the following columns:

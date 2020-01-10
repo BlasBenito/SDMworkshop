@@ -218,3 +218,15 @@ restricted.background <- prepareTrainingData(
   thinning = TRUE,
   minimum.distance = raster::xres(europe2000)
 )
+
+
+# 6 autoSelectVariables -------------------------------------------------------
+data("virtualSpeciesPB")
+selected.vars <- autoSelectVariables(
+  x = virtualSpeciesPB,
+  presence.column = "presence",
+  variables = NULL,
+  exclude.variables = c("x", "y"),
+  verbose = TRUE
+  )
+selected.vars
