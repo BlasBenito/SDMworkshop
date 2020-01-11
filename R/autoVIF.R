@@ -9,7 +9,7 @@
 #' )
 #'
 #' @param x A data frame with numeric columns.
-#' @param try.to.keep A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables not in \code{x} that are not in \code{try.to.keep}, then to the variables in \code{try.to.keep}, and finally to the outcome of both vif analyses, while always trying to remove variables not in \code{try.to.keep}.
+#' @param try.to.keep A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables not in \code{x} that are not in \code{try.to.keep}, then to the variables in \code{try.to.keep}, and finally to the outcome of both vif analyses, while always trying to remove variables not in \code{try.to.keep}. It is recommended to use the variable order of the \code{variable} column from the output of \code{\link{biserialCorrelation}}.
 #' @param verbose Boolean, defaults to TRUE. Triggers messages describing what variables are being removed.
 #'
 #' @return A character vector with the names of the selected variables.
@@ -25,11 +25,11 @@
 #')
 #'selected.vars
 #'
-#'#autoVIF can also take the output of corPB
+#'#autoVIF can also take the output of SDMworkshop::biserialCorrelation
 #'#as try.to.keep argument, as follows:
 #' data(virtualSpeciesPB)
 #'
-#' cPB <- SDMworkshop::biserialCorrelationPB(
+#' cPB <- SDMworkshop::biserialCorrelation(
 #' x = virtualSpeciesPB,
 #' presence.column = "presence",
 #' variables = c("bio1", "bio5", "bio6")
@@ -127,28 +127,48 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
     repeat {
 
       #selects variables with vif lower than 5
-      var.to.remove <-
+      # var.to.remove <-
+      #   .vif2df(x = x[, try.to.keep]) %>%
+      #   dplyr::inner_join(y = preference, by = "variable") %>%
+      #   dplyr::filter(vif > 5) %>%
+      #   dplyr::filter(preference == max(preference)) %>%
+      #   dplyr::slice(1) %>%
+      #   dplyr::select(variable) %>%
+      #   as.character()
+
+      #selects variables with vif lower than 5
+      vif.df <-
         .vif2df(x = x[, try.to.keep]) %>%
-        dplyr::inner_join(y = preference, by = "variable") %>%
-        dplyr::filter(preference == max(preference)) %>%
-        dplyr::filter(vif == max(vif))  %>%
-        dplyr::slice(1) %>%
-        dplyr::select(variable) %>%
-        as.character()
+        dplyr::inner_join(y = preference, by = "variable")
 
       #if the first row contains a vif higher than 5
-      if(var.to.remove != "character(0)"){
+      if(max(vif.df$vif) > 5){
 
-        #updates try.to.keep
-        if(verbose == TRUE){cat(paste(var.to.remove, ", ", sep = ""))}
-        try.to.keep <- try.to.keep[try.to.keep != var.to.remove]
+        #selects variable to remove
+        var.to.remove <-
+          vif.df %>%
+          dplyr::filter(preference == max(preference)) %>%
+          dplyr::slice(1) %>%
+          dplyr::select(variable) %>%
+          as.character()
 
-        #stops if there are less than 3 vars left
-        if(length(try.to.keep) == 1){
-          break
-        }
+        #if the first row contains a vif higher than 5
+        if(var.to.remove != "character(0)"){
 
-      } #end of "if(var.to.remove != "character(0)")"
+          #updates try.to.keep
+          if(verbose == TRUE){cat(paste(var.to.remove, ", ", sep = ""))}
+          try.to.keep <- try.to.keep[try.to.keep != var.to.remove]
+
+          #stops if there are less than 3 vars left
+          if(length(try.to.keep) == 1){
+            break
+          }
+
+        } #end of "if(var.to.remove != "character(0)")"
+
+      } else {
+        break
+      }
 
     } #end of repeat
 
@@ -225,6 +245,7 @@ autoVIF <- function(x, try.to.keep = NULL, verbose = TRUE){
       }
 
     } else {
+      selected.vars <- vif.df$variable
       break
     } #end of "if(max(vif.df$vif) > 5)..."
 

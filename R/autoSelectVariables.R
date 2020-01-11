@@ -1,13 +1,13 @@
 #' Automatic selection of predictive variables for species distribution modeling
 #'
-#' @description Computes the biserial correlation between presence and background data for a set of predictors with \code{\link{biserialCorrelationPB}}, and uses the output of this function as argument \code{try.to.keep} in \code{\link{autoVIF}}. This approach should provide a reasonable outcome when modelling with presence-background data. If you have a preference on what variables to use in your modelling exercise, please use \code{\link{autoVIF}} instead.
+#' @description Applies \code{\link{biserialCorrelation}}, \code{\link{correlationDendrogram}} (with correlation threshold set to 0.5), and \code{\link{autoVIF}} to automatically select a set of non-correlated variables with the higher biserial correlation as possible.
 #'
 #' @usage autoSelectVariables(
 #'   x,
 #'   presence.column = "presence",
 #'   variables = NULL,
 #'   exclude.variables = NULL,
-#'   verbose = TRUE
+#'   plot = TRUE
 #')
 #'
 #'
@@ -15,56 +15,89 @@
 #' @param presence.column Character, name of the presence column.
 #' @param variables Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.
 #' @param exclude.variables Character vector, variables to exclude from the analysis.
-#' @param verbose Boolean, defaults to TRUE. Triggers messages describing what variables are being removed.
+#' @param plot Boolean, if \code{TRUE}, prints last correlation dendrogram to test the final output.
 #'
 #' @return A character vector with the names of the selected variables.
 #'
-#' #' @examples
+#' @examples
 #' \dontrun{
-#'data("virtualSpeciesPB")
-#'selected.vars <- autoSelectVariables(
-#'  x = virtualSpeciesPB,
-#'  presence.column = "presence",
-#'  variables = NULL,
-#'  exclude.variables = c("x", "y"),
-#'  verbose = TRUE
-#')
-#'selected.vars
+#' data("virtualSpeciesPB")
+#' selected.vars <- autoSelectVariables(
+#'   x = virtualSpeciesPB,
+#'   presence.column = "presence",
+#'   exclude.variables = c("x", "y")
+#' )
+#' selected.vars
+#' HH::vif(virtualSpeciesPB[, selected.vars])
+#' cor(virtualSpeciesPB[, selected.vars])
 #'}
 #'
 #' @author Blas Benito <blasbenito@gmail.com>.
 #'
 #' @export
-autoSelectVariables <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, verbose = TRUE){
+autoSelectVariables <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
 
   #computes biserial correlation
-  bis.cor <- biserialCorrelationPB(
+  bis.cor <- biserialCorrelation(
     x = x,
     presence.column = presence.column,
     variables = variables,
     exclude.variables = exclude.variables,
     plot = FALSE
-    )$df
+    )
 
-  #removing vars with very low p
-  bis.cor <- bis.cor[bis.cor$p < 0.1, ]
+  #completes exclude variables
+  exclude.variables <- c(exclude.variables, presence.column)
 
-  #select ones with p-value lower than 0.05
-  selected.vars <- bis.cor[bis.cor$p < 0.05, "variable"]
+  #gets selected variables
+  old.selected.variables <- bis.cor$df[bis.cor$df$p < 0.05, "variable"]
 
-  #if none has p < 0.05
-  if(length(selected.vars) == 0){
-    selected.vars <- bis.cor[1:floor(nrow(bis.cor)/2), "variable"]
+  #selects variables
+  repeat{
+
+    #computes bivariate correlation
+    new.selected.variables <- correlationDendrogram(
+      x = x,
+      variables = old.selected.variables,
+      exclude.variables = exclude.variables,
+      correlation.threshold = 0.50,
+      automatic.selection = TRUE,
+      biserialCorrelation.output = bis.cor,
+      plot = FALSE
+    )$selected.variables
+
+    if(length(old.selected.variables) == length(new.selected.variables)){
+      break
+    } else {
+      old.selected.variables <- new.selected.variables
+    }
+
   }
 
-  #autoVIF
-  selected.vars <- autoVIF(
-    x = x[, bis.cor$variable],
-    try.to.keep = selected.vars,
-    verbose = verbose
+  #generates try.to.keep vector
+  try.to.keep <- bis.cor$df[bis.cor$df$variable %in% new.selected.variables, ]$variable
+  if(length(try.to.keep) == 0){
+    try.to.keep <- bis.cor$df$variable
+  }
+
+  #autovif
+  selected.variables <- autoVIF(
+    x = x[, new.selected.variables],
+    try.to.keep = try.to.keep,
+    verbose = FALSE
   )
 
+  #final plot
+  if(plot == TRUE){
+    correlationDendrogram(
+      x = x[, selected.variables],
+      automatic.selection = FALSE,
+      biserialCorrelation.output = bis.cor,
+      plot = TRUE
+    )
+  }
+
   #return output
-  return(selected.vars)
+  return(selected.variables)
 
 }

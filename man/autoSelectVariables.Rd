@@ -9,7 +9,7 @@ autoSelectVariables(
   presence.column = "presence",
   variables = NULL,
   exclude.variables = NULL,
-  verbose = TRUE
+  plot = TRUE
 )
 }
 \arguments{
@@ -21,7 +21,7 @@ autoSelectVariables(
 
 \item{exclude.variables}{Character vector, variables to exclude from the analysis.}
 
-\item{verbose}{Boolean, defaults to TRUE. Triggers messages describing what variables are being removed.}
+\item{plot}{Boolean, if \code{TRUE}, prints last correlation dendrogram to test the final output.}
 }
 \value{
 A character vector with the names of the selected variables.
@@ -30,17 +30,17 @@ A character vector with the names of the selected variables.
 \dontrun{
 data("virtualSpeciesPB")
 selected.vars <- autoSelectVariables(
- x = virtualSpeciesPB,
- presence.column = "presence",
- variables = NULL,
- exclude.variables = c("x", "y"),
- verbose = TRUE
+  x = virtualSpeciesPB,
+  presence.column = "presence",
+  exclude.variables = c("x", "y")
 )
 selected.vars
+HH::vif(virtualSpeciesPB[, selected.vars])
+cor(virtualSpeciesPB[, selected.vars])
 }
 }
 \description{
-Computes the biserial correlation between presence and background data for a set of predictors with \code{\link{biserialCorrelationPB}}, and uses the output of this function as argument \code{try.to.keep} in \code{\link{autoVIF}}. This approach should provide a reasonable outcome when modelling with presence-background data. If you have a preference on what variables to use in your modelling exercise, please use \code{\link{autoVIF}} instead.
+Applies \code{\link{biserialCorrelation}}, \code{\link{correlationDendrogram}} (with correlation threshold set to 0.5), and \code{\link{autoVIF}} to automatically select a set of non-correlated variables with the higher biserial correlation as possible.
 }
 \author{
 Blas Benito <blasbenito@gmail.com>.

@@ -219,14 +219,32 @@ restricted.background <- prepareTrainingData(
   minimum.distance = raster::xres(europe2000)
 )
 
+# 6 correlationDendrogram -----------------------------------------------------ç
+data("virtualSpeciesPB")
 
-# 6 autoSelectVariables -------------------------------------------------------
+bis.cor <- biserialCorrelation(
+  x = virtualSpeciesPB,
+  exclude.variables = c("x", "y"),
+  plot = TRUE
+)
+
+selected.vars <- correlationDendrogram(
+  x = virtualSpeciesPB,
+  variables = NULL,
+  exclude.variables = c("x", "y", "presence"),
+  correlation.threshold = 0.5,
+  automatic.selection = TRUE,
+  biserialCorrelation.output = bis.cor
+)
+
+# 7 autoSelectVariables -------------------------------------------------------
 data("virtualSpeciesPB")
 selected.vars <- autoSelectVariables(
   x = virtualSpeciesPB,
   presence.column = "presence",
-  variables = NULL,
-  exclude.variables = c("x", "y"),
-  verbose = TRUE
+  exclude.variables = c("x", "y")
   )
 selected.vars
+HH::vif(virtualSpeciesPB[, selected.vars])
+cor(virtualSpeciesPB[, selected.vars])
+

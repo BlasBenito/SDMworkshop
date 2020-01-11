@@ -2,7 +2,7 @@
 #'
 #' @description Computes the biserial correlation between presence and background data for a set of predictors. A high biserial correlation for a given predictor indicates that the distributions of the presence and background records are separated enough in the space of predictor values to suggest that the predictor is a good candidate for a species distribution model.
 #'
-#' @usage biserialCorrelationPB(
+#' @usage biserialCorrelation(
 #'   x,
 #'   presence.column = "presence",
 #'   variables = NULL,
@@ -26,7 +26,7 @@
 #'
 #' @examples
 #' data(virtualSpeciesPB)
-#' cPB <- biserialCorrelationPB(
+#' cPB <- biserialCorrelation(
 #'   x = virtualSpeciesPB,
 #'   presence.column = "presence",
 #'   variables = c("bio1", "bio5", "bio6")
@@ -34,14 +34,14 @@
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-biserialCorrelationPB <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
+biserialCorrelation <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
 
   #getting variables
   if(is.null(variables) == TRUE){
     variables <- colnames(x)[colnames(x) != presence.column]
-    if(is.null(exclude.variables) == FALSE){
-      variables <- variables[!(variables %in% exclude.variables)]
-    }
+  }
+  if(is.null(exclude.variables) == FALSE){
+    variables <- variables[!(variables %in% exclude.variables)]
   }
 
   #subsetting x

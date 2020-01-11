@@ -13,7 +13,7 @@ autoVIF(
 \arguments{
 \item{x}{A data frame with numeric columns.}
 
-\item{try.to.keep}{A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables not in \code{x} that are not in \code{try.to.keep}, then to the variables in \code{try.to.keep}, and finally to the outcome of both vif analyses, while always trying to remove variables not in \code{try.to.keep}.}
+\item{try.to.keep}{A character vector with the names of the variables the user would like to keep, in order of preference. If this argument is not \code{NULL}, the function first applies \code{\link[HH]{vif}} to the variables not in \code{x} that are not in \code{try.to.keep}, then to the variables in \code{try.to.keep}, and finally to the outcome of both vif analyses, while always trying to remove variables not in \code{try.to.keep}. It is recommended to use the variable order of the \code{variable} column from the output of \code{\link{biserialCorrelation}}.}
 
 \item{verbose}{Boolean, defaults to TRUE. Triggers messages describing what variables are being removed.}
 }
@@ -34,11 +34,11 @@ selected.vars <- SDMworkshop::autoVIF(
 )
 selected.vars
 
-#autoVIF can also take the output of corPB
+#autoVIF can also take the output of SDMworkshop::biserialCorrelation
 #as try.to.keep argument, as follows:
 data(virtualSpeciesPB)
 
-cPB <- SDMworkshop::biserialCorrelationPB(
+cPB <- SDMworkshop::biserialCorrelation(
 x = virtualSpeciesPB,
 presence.column = "presence",
 variables = c("bio1", "bio5", "bio6")

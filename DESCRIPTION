@@ -27,7 +27,8 @@ Imports:
     magrittr,
     dismo,
     rgeos,
-    sp
+    sp,
+    ggdendro
 Suggests: 
     devtools,
     formatR,
