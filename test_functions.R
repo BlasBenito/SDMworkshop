@@ -238,6 +238,15 @@ selected.vars <- correlationDendrogram(
   label.size = 6
 )
 
+#auto version
+selected.vars <- autoCorrelationDendrogram(
+  x = virtualSpeciesPB,
+  exclude.variables = c("x", "y", "presence"),
+  correlation.threshold = 0.25,
+  biserialCorrelation.output = bis.cor,
+  label.size = 6
+)
+
 # 7 autoSelectVariables -------------------------------------------------------
 data("virtualSpeciesPB")
 selected.vars <- autoSelectVariables(

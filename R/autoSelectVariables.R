@@ -7,7 +7,8 @@
 #'   presence.column = "presence",
 #'   variables = NULL,
 #'   exclude.variables = NULL,
-#'   plot = TRUE
+#'   plot = TRUE,
+#'   label.size = 6
 #')
 #'
 #'
@@ -16,6 +17,7 @@
 #' @param variables Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.
 #' @param exclude.variables Character vector, variables to exclude from the analysis.
 #' @param plot Boolean, if \code{TRUE}, prints last correlation dendrogram to test the final output.
+#' @param label.size Numeric, size of the dendrogram labels.
 #'
 #' @return A character vector with the names of the selected variables.
 #'
@@ -35,7 +37,7 @@
 #' @author Blas Benito <blasbenito@gmail.com>.
 #'
 #' @export
-autoSelectVariables <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
+autoSelectVariables <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE, label.size = 6){
 
   #computes biserial correlation
   bis.cor <- biserialCorrelation(
@@ -52,27 +54,15 @@ autoSelectVariables <- function(x, presence.column = "presence", variables = NUL
   #gets selected variables
   old.selected.variables <- bis.cor$df[bis.cor$df$p < 0.05, "variable"]
 
-  #selects variables
-  repeat{
-
-    #computes bivariate correlation
-    new.selected.variables <- correlationDendrogram(
-      x = x,
-      variables = old.selected.variables,
-      exclude.variables = exclude.variables,
-      correlation.threshold = 0.50,
-      automatic.selection = TRUE,
-      biserialCorrelation.output = bis.cor,
-      plot = FALSE
-    )$selected.variables
-
-    if(length(old.selected.variables) == length(new.selected.variables)){
-      break
-    } else {
-      old.selected.variables <- new.selected.variables
-    }
-
-  }
+  #selectes variables by their bivariate correlation
+  new.selected.variables <- autoCorrelationDendrogram(
+    x = virtualSpeciesPB,
+    variables = old.selected.variables,
+    exclude.variables = exclude.variables,
+    correlation.threshold = 0.50,
+    biserialCorrelation.output = bis.cor,
+    plot = FALSE
+  )
 
   #generates try.to.keep vector
   try.to.keep <- bis.cor$df[bis.cor$df$variable %in% new.selected.variables, ]$variable
@@ -93,7 +83,8 @@ autoSelectVariables <- function(x, presence.column = "presence", variables = NUL
       x = x[, selected.variables],
       automatic.selection = FALSE,
       biserialCorrelation.output = bis.cor,
-      plot = TRUE
+      plot = TRUE,
+      label.size = label.size
     )
   }
 
