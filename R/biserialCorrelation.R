@@ -91,7 +91,8 @@ biserialCorrelation <- function(x, presence.column = "presence", variables = NUL
       color = viridis::viridis(1, begin = 0.5)) +
     ggplot2::guides(colour = guide_legend(override.aes = list(alpha = 1))) +
     ggplot2::ylab("Variable") +
-    ggplot2::xlab("Presence")
+    ggplot2::xlab("Presence") +
+    theme(legend.position = "bottom")
 
   #prints plot to screen
   if(plot == TRUE){

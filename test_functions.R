@@ -234,7 +234,8 @@ selected.vars <- correlationDendrogram(
   exclude.variables = c("x", "y", "presence"),
   correlation.threshold = 0.5,
   automatic.selection = TRUE,
-  biserialCorrelation.output = bis.cor
+  biserialCorrelation.output = bis.cor,
+  label.size = 6
 )
 
 # 7 autoSelectVariables -------------------------------------------------------

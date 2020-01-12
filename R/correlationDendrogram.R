@@ -5,21 +5,23 @@
 #' @usage correlationDendrogram(
 #'   x,
 #'   variables = NULL,
-#'   exclude.variables = NULL,
+#'   exclude.variables = c("x", "y", "presence"),
 #'   correlation.threshold = 0.5,
 #'   automatic.selection = TRUE,
 #'   biserialCorrelation.output = NULL,
-#'   plot = TRUE
+#'   plot = TRUE,
+#'   label.size = 10
 #'   )
 #'
 #'
 #' @param x A data frame with a presence column with 1 indicating presence and 0 indicating background, and columns with predictor values.
 #' @param variables Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.
-#' @param exclude.variables Character vector, variables to exclude from the analysis.
+#' @param exclude.variables Character vector, variables to exclude from the analysis. Defaults to \code{c("x", "y", "presence")}.
 #' @param correlation.threshold Numeric in the interval [0, 1], maximum Pearson correlation of the selected variables.
 #' @param automatic.selection Boolean. If \code{TRUE}, the function provides a vector of selected variables along with the dendrogram plot. Otherwise, only the dendrogram plot is returned.
 #' @param biserialCorrelation.output List, output of the function \code{\link{biserialCorrelation}}. Its R-squared scores are used to select variables.
 #' @param plot Boolean, prints biserial correlation plot if \code{TRUE}.
+#' @param label.size Numeric, size of the dendrogram labels.
 #'
 #' @return If \code{automatic.selection = TRUE}, a list with two slots named "dendrogram" (a ggplot2 object) and "selected.variables" with the dendrogram and the character vector with the selected variables. Otherwise, only returns the dendrogram.
 #'
@@ -48,11 +50,12 @@
 correlationDendrogram <- function(
   x,
   variables = NULL,
-  exclude.variables = NULL,
+  exclude.variables = c("x", "y", "presence"),
   correlation.threshold = 0.5,
   automatic.selection = TRUE,
   biserialCorrelation.output = NULL,
-  plot = TRUE
+  plot = TRUE,
+  label.size = 10
   ){
 
   #keeping numeric columns only and removing NA
@@ -65,7 +68,9 @@ correlationDendrogram <- function(
     variables <- colnames(x)
   }
   if(is.null(exclude.variables) == FALSE){
-    variables <- variables[!(variables %in% exclude.variables)]
+    if(sum(exclude.variables %in% variables) == length(exclude.variables)){
+      variables <- variables[!(variables %in% exclude.variables)]
+    }
   }
 
   #subsetting x
@@ -110,9 +115,9 @@ correlationDendrogram <- function(
             y = 0,
             hjust = 1
           ),
-          size = 10
+          size = label.size
         ) +
-        ggplot2::coord_flip(ylim = c(-0.2, 1)) +
+        ggplot2::coord_flip(ylim = c(-0.4, 1)) +
         viridis::scale_colour_viridis(direction = -1, end = 0.9)  +
         ggplot2::theme(
           axis.text.y = element_blank(),
@@ -120,21 +125,23 @@ correlationDendrogram <- function(
           axis.ticks.y = element_blank(),
           axis.title.y = element_blank(),
           plot.margin = unit(c(2,2,2,2), "lines"),
-          axis.text.x = element_text(size = 20),
-          legend.position = "left"
+          axis.text.x = element_text(size = label.size * 2),
+          legend.position = "bottom",
+          legend.key.width = unit(2, "lines")
         ) +
         ggplot2::labs(colour = "R2") +
         ggplot2::geom_hline(
           yintercept = 1 - correlation.threshold,
           col = "red4",
           linetype = "dashed",
-          size = 2,
+          size = 1,
           alpha = 0.5
         ) +
         ggplot2::scale_y_continuous(breaks = c(1 - correlation.threshold, 0, 0.25, 0.5, 0.75, 1)) +
         ggplot2::ylab("1 - correlation")
 
       if(plot == TRUE){
+        ggplot2::theme_set(cowplot::theme_cowplot())
         print(cluster.plot)
         }
 
@@ -195,7 +202,7 @@ correlationDendrogram <- function(
       labs$label <- as.character(labs$label)
       for(i in 1:nrow(labs)){
         if(labs[i, "label"] %in% selected.variables){
-          labs[i, "label"] <- paste("-> ", labs[i, "label"], sep = "")
+          labs[i, "label"] <- paste("\u{2192} ", labs[i, "label"], sep = "")
         }
       }
     }
@@ -221,9 +228,9 @@ correlationDendrogram <- function(
             colour = labs$R2,
             hjust = 1
           ),
-          size = 10
+          size = label.size
         ) +
-        ggplot2::coord_flip(ylim = c(-0.2, 1)) +
+        ggplot2::coord_flip(ylim = c(-0.4, 1)) +
         viridis::scale_colour_viridis(direction = -1, end = 0.9)  +
         ggplot2::theme(
           axis.text.y = element_blank(),
@@ -231,21 +238,23 @@ correlationDendrogram <- function(
           axis.ticks.y = element_blank(),
           axis.title.y = element_blank(),
           plot.margin = unit(c(2,2,2,2), "lines"),
-          axis.text.x = element_text(size = 20),
-          legend.position = "left"
+          axis.text.x = element_text(size = label.size * 2),
+          legend.position = "bottom",
+          legend.key.width = unit(2, "lines")
         ) +
         ggplot2::labs(colour = "R2") +
         ggplot2::geom_hline(
           yintercept = 1 - correlation.threshold,
           col = "red4",
           linetype = "dashed",
-          size = 2,
+          size = 1,
           alpha = 0.5
         ) +
         ggplot2::scale_y_continuous(breaks = c(1 - correlation.threshold, 0, 0.25, 0.5, 0.75, 1)) +
         ggplot2::ylab("1 - correlation")
 
       if(plot == TRUE){
+        ggplot2::theme_set(cowplot::theme_cowplot())
         print(cluster.plot)
         }
 
