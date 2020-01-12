@@ -248,3 +248,12 @@ selected.vars
 HH::vif(virtualSpeciesPB[, selected.vars])
 cor(virtualSpeciesPB[, selected.vars])
 
+# 8 plotUseAvailability -------------------------------------------------------
+data("virtualSpeciesPB")
+x <- plotUseAvailability(
+  x = virtualSpeciesPB,
+  presence.column = "presence",
+  variables = NULL,
+  exclude.variables = c("x", "y"),
+  plot = TRUE
+)
