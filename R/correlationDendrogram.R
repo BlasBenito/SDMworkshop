@@ -10,7 +10,7 @@
 #'   automatic.selection = TRUE,
 #'   biserialCorrelation.output = NULL,
 #'   plot = TRUE,
-#'   label.size = 10
+#'   label.size = 6
 #'   )
 #'
 #'
@@ -55,7 +55,7 @@ correlationDendrogram <- function(
   automatic.selection = TRUE,
   biserialCorrelation.output = NULL,
   plot = TRUE,
-  label.size = 10
+  label.size = 6
   ){
 
   #keeping numeric columns only and removing NA

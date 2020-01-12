@@ -9,7 +9,8 @@ autoSelectVariables(
   presence.column = "presence",
   variables = NULL,
   exclude.variables = NULL,
-  plot = TRUE
+  plot = TRUE,
+  label.size = 6
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ autoSelectVariables(
 \item{exclude.variables}{Character vector, variables to exclude from the analysis.}
 
 \item{plot}{Boolean, if \code{TRUE}, prints last correlation dendrogram to test the final output.}
+
+\item{label.size}{Numeric, size of the dendrogram labels.}
 }
 \value{
 A character vector with the names of the selected variables.
@@ -31,7 +34,7 @@ Applies \code{\link{biserialCorrelation}}, \code{\link{correlationDendrogram}} (
 }
 \examples{
 \dontrun{
-data("virtualSpeciesPB")
+data(virtualSpeciesPB)
 selected.vars <- autoSelectVariables(
   x = virtualSpeciesPB,
   presence.column = "presence",

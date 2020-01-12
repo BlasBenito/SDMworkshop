@@ -2,7 +2,7 @@
 #'
 #' @description Computes the correlation between all pairs of variables in a training dataset and removes variables until there are no more variables correlated above a given threshold (0.5 Pearson correlation by default). This function requires a \code{\link{biserialCorrelation}} output, and it won't run if the argument remains \code{NULL}.
 #'
-#' @usage correlationDendrogram(
+#' @usage autoCorrelationDendrogram(
 #'   x,
 #'   variables = NULL,
 #'   exclude.variables = c("x", "y", "presence"),

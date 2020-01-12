@@ -156,7 +156,7 @@
 NULL
 
 #' @import utils
-utils::globalVariables(c("vif", "variable", "presence", "value", "layer", "R2", "x", "y", "group", ".", "xend", "yend"))
+utils::globalVariables(c("vif", "variable", "presence", "value", "layer", "R2", "x", "y", "group", ".", "xend", "yend", "bis.cor", "label"))
 
 #' Pipe operator
 #'

@@ -23,7 +23,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' data("virtualSpeciesPB")
+#' data(virtualSpeciesPB)
 #' selected.vars <- autoSelectVariables(
 #'   x = virtualSpeciesPB,
 #'   presence.column = "presence",
@@ -56,7 +56,7 @@ autoSelectVariables <- function(x, presence.column = "presence", variables = NUL
 
   #selectes variables by their bivariate correlation
   new.selected.variables <- autoCorrelationDendrogram(
-    x = virtualSpeciesPB,
+    x = x,
     variables = old.selected.variables,
     exclude.variables = exclude.variables,
     correlation.threshold = 0.50,
