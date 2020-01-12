@@ -31,8 +31,11 @@ correlationDendrogram(
 }
 \value{
 If \code{automatic.selection = TRUE}, a list with two slots named "dendrogram" (a ggplot2 object) and "selected.variables" with the dendrogram and the character vector with the selected variables. Otherwise, only returns the dendrogram.
-
-#' @examples
+}
+\description{
+Computes the correlation between all pairs of variables in a training dataset. If a \code{\link{biserialCorrelation}} output is provided, it further selects variables automatically based on the R-squared value obtained by each variable in the biserial correlation analysis.
+}
+\examples{
 \dontrun{
 data("virtualSpeciesPB")
 
@@ -50,9 +53,7 @@ selected.vars <- correlationDendrogram(
  biserialCorrelation.output = bis.cor
 )$selected.variables
 }
-}
-\description{
-Computes the correlation between all pairs of variables in a training dataset. If a \code{\link{biserialCorrelation}} output is provided, it further selects variables automatically based on the R-squared value obtained by each variable in the biserial correlation analysis.
+
 }
 \author{
 Blas Benito <blasbenito@gmail.com>.

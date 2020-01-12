@@ -243,7 +243,7 @@ correlationDendrogram <- function(
           alpha = 0.5
         ) +
         ggplot2::scale_y_continuous(breaks = c(1 - correlation.threshold, 0, 0.25, 0.5, 0.75, 1)) +
-        ggplot2::ylab("1 - correlación")
+        ggplot2::ylab("1 - correlation")
 
       if(plot == TRUE){
         print(cluster.plot)

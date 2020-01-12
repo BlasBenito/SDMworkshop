@@ -25,8 +25,11 @@ autoSelectVariables(
 }
 \value{
 A character vector with the names of the selected variables.
-
-#' @examples
+}
+\description{
+Applies \code{\link{biserialCorrelation}}, \code{\link{correlationDendrogram}} (with correlation threshold set to 0.5), and \code{\link{autoVIF}} to automatically select a set of non-correlated variables with the higher biserial correlation as possible.
+}
+\examples{
 \dontrun{
 data("virtualSpeciesPB")
 selected.vars <- autoSelectVariables(
@@ -38,9 +41,7 @@ selected.vars
 HH::vif(virtualSpeciesPB[, selected.vars])
 cor(virtualSpeciesPB[, selected.vars])
 }
-}
-\description{
-Applies \code{\link{biserialCorrelation}}, \code{\link{correlationDendrogram}} (with correlation threshold set to 0.5), and \code{\link{autoVIF}} to automatically select a set of non-correlated variables with the higher biserial correlation as possible.
+
 }
 \author{
 Blas Benito <blasbenito@gmail.com>.
