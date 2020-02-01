@@ -71,7 +71,7 @@ testSpatialCorrelation <- function(xy, variables){
     FUN = function(x) ape::Moran.I(x, xy.distancias, na.rm = TRUE)
   )
 
-  #list of dataframes to single dataframe
+  #list to dataframe
   output.df <- as.data.frame(
     data.table::rbindlist(moran.i)
     )

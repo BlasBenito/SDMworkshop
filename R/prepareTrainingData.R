@@ -142,13 +142,35 @@ prepareTrainingData <- function(
   #-------------------
   if(background == TRUE){
 
-    #getting background coordinates
-    background <- data.frame(
-      dismo::randomPoints(
-        mask = variables,
-        n = n
+    #number of valid cells
+    n.valid <- sum(!is.na(as.vector(variables[[1]])))
+
+    #if n > n.valid
+    if(n > n.valid){
+
+      #getting complete background
+      background <- na.omit(
+        raster::as.data.frame(
+          x = variables,
+          xy = TRUE
+        )
       )
-    )
+
+      #getting coordinates only
+      background <- background[, c("x", "y")]
+
+
+    } else {
+
+      #getting background coordinates
+      background <- data.frame(
+        dismo::randomPoints(
+          mask = variables,
+          n = n
+        )
+      )
+
+    }
 
     #keeping points with extreme values of the variables
     for(variable in names(variables)){
