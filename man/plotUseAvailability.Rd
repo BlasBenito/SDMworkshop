@@ -9,7 +9,9 @@ plotUseAvailability(
   presence.column = "presence",
   variables = NULL,
   exclude.variables = NULL,
-  plot = TRUE
+  axis.text.size = 6,
+  legend.text.size = 12,
+  strip.text.size = 10
 )
 }
 \arguments{
@@ -21,7 +23,11 @@ plotUseAvailability(
 
 \item{exclude.variables}{Character vector, variables to exclude from the analysis.}
 
-\item{plot}{Boolean, prints biserial correlation plot if \code{TRUE}.}
+\item{axis.text.size}{Numeric, size of the axis labels.}
+
+\item{legend.text.size}{Numeric, size of the legend labels.}
+
+\item{strip.text.size}{Numeric, size of the panel names.}
 }
 \value{
 A ggplot object.
@@ -35,8 +41,7 @@ x <- plotUseAvailability(
  x = virtualSpeciesPB,
  presence.column = "presence",
  variables = NULL,
- exclude.variables = c("x", "y"),
- plot = TRUE
+ exclude.variables = c("x", "y")
 )
 
 }

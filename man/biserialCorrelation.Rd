@@ -9,6 +9,11 @@ biserialCorrelation(
   presence.column = "presence",
   variables = NULL,
   exclude.variables = NULL,
+  axis.text.size = 6,
+  legend.text.size = 12,
+  strip.text.size = 10,
+  point.size = 1,
+  line.size = 1,
   plot = TRUE
 )
 }
@@ -22,6 +27,16 @@ biserialCorrelation(
 \item{exclude.variables}{Character vector, variables to exclude from the analysis.}
 
 \item{plot}{Boolean, prints biserial correlation plot if \code{TRUE}.}
+
+\item{axis.text.size}{Numeric, size of the axis labels.}
+
+\item{legend.text.size}{Numeric, size of the legend labels.}
+
+\item{strip.text.size}{Numeric, size of the panel names.}
+
+\item{point.size}{Size of points in the biserial correlation plot.}
+
+\item{line.size}{Line width in the biserial correlation plot.}
 }
 \value{
 A named list with two slots named \code{plot} and \code{df}. The former contains a ggplot object with the biserial correlation analysis. The latter is a data frame with the following columns:

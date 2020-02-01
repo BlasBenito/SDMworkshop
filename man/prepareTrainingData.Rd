@@ -22,7 +22,7 @@ prepareTrainingData(
 
 \item{variables}{A raster brick or stack with environmental variables. Must be in the same reference system of \code{xy}.}
 
-\item{n}{Integer, number of background points to generate. To generate pseudo-absences just define a low n (i.e. twice the number of presences).}
+\item{n}{Integer, number of background points to generate. To generate pseudo-absences just define a low n (i.e. twice the number of presences). If \code{n} is larger than the number of valid cells in \code{variables}, then all cells are selected as background.}
 
 \item{presence.only}{Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns presence-only data.}
 
