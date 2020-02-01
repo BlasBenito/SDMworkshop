@@ -51,7 +51,7 @@ testSpatialCorrelation <- function(xy, variables){
   #inverse distance matrix between records
   xy.distancias <- 1/ (geosphere::distm(
     x = xy.variables[, c("x", "y")],
-    fun = distGeo
+    fun = geosphere::distGeo
   ) / 1000)
 
   #replaces Inf with 0
