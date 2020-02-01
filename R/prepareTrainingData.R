@@ -17,7 +17,7 @@
 #'
 #' @param xy A data frame with two columns with coordinates x and y representing presence records. Column names are irrelevant as long as the first column represents the x coordinate, and the second column represents the y coordinate.
 #' @param variables A raster brick or stack with environmental variables. Must be in the same reference system of \code{xy}.
-#' @param n Integer, number of background points to generate. To generate pseudo-absences just define a low n (i.e. twice the number of presences).
+#' @param n Integer, number of background points to generate. To generate pseudo-absences just define a low n (i.e. twice the number of presences). If \code{n} is larger than the number of valid cells in \code{variables}, then all cells are selected as background.
 #' @param presence.only Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns presence-only data.
 #' @param background Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns background data generated to the extension of \code{variables}.
 #' @param restricted.background Boolean. If \code{TRUE}, all other options are set to \code{FALSE}, and the function returns restricted background data generated within a buffer of width equeal to \code{restricted.background.buffer} around the presence records \code{xy}.
