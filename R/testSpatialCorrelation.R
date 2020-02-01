@@ -60,6 +60,10 @@ testSpatialCorrelation <- function(xy, variables){
   #sets diagonal to 0
   diag(xy.distancias) <- 0
 
+  #removes x and y columns
+  xy.variables$x <- NULL
+  xy.variables$y <- NULL
+
   #computes Moran I with ape::Moran.I
   moran.i <- apply(
     xy.variables,
