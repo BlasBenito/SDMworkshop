@@ -7,14 +7,18 @@
 #'   presence.column = "presence",
 #'   variables = NULL,
 #'   exclude.variables = NULL,
-#'   plot = TRUE
+#'   axis.text.size = 6,
+#'   legend.text.size = 12,
+#'   strip.text.size = 10
 #' )
 #'
 #' @param x A data frame with a presence column with 1 indicating presence and 0 indicating background, and columns with predictor values.
 #' @param presence.column Character, name of the presence column.
 #' @param variables Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.
 #' @param exclude.variables Character vector, variables to exclude from the analysis.
-#' @param plot Boolean, prints biserial correlation plot if \code{TRUE}.
+#' @param axis.text.size Numeric, size of the axis labels.
+#' @param legend.text.size Numeric, size of the legend labels.
+#' @param strip.text.size Numeric, size of the panel names.
 #'
 #' @return A ggplot object.
 #'
@@ -24,13 +28,12 @@
 #'  x = virtualSpeciesPB,
 #'  presence.column = "presence",
 #'  variables = NULL,
-#'  exclude.variables = c("x", "y"),
-#'  plot = TRUE
+#'  exclude.variables = c("x", "y")
 #')
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-plotUseAvailability <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
+plotUseAvailability <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, axis.text.size = 6, legend.text.size = 12, strip.text.size = 10){
 
   #getting variables
   if(is.null(variables) == TRUE){
@@ -82,11 +85,12 @@ plotUseAvailability <- function(x, presence.column = "presence", variables = NUL
     ) +
     ggplot2::xlab("") +
     ggplot2::ylab("") +
-    theme(legend.position = "bottom")
-
-  if(plot == TRUE){
-    print(plot.use.availability)
-  }
+    theme(
+      legend.position = "bottom",
+      axis.text = element_text(size = axis.text.size),
+      legend.text = element_text(size = legend.text.size),
+      strip.text = element_text(size = strip.text.size)
+      )
 
   return(plot.use.availability)
 }

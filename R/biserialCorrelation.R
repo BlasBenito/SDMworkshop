@@ -7,6 +7,11 @@
 #'   presence.column = "presence",
 #'   variables = NULL,
 #'   exclude.variables = NULL,
+#'   axis.text.size = 6,
+#'   legend.text.size = 12,
+#'   strip.text.size = 10,
+#'   point.size = 1,
+#'   line.size = 1,
 #'   plot = TRUE
 #')
 #'
@@ -14,6 +19,11 @@
 #' @param presence.column Character, name of the presence column.
 #' @param variables Character vector, names of the columns representing predictors. If \code{NULL}, all numeric variables but \code{presence.column} are considered.
 #' @param exclude.variables Character vector, variables to exclude from the analysis.
+#' @param axis.text.size Numeric, size of the axis labels.
+#' @param legend.text.size Numeric, size of the legend labels.
+#' @param strip.text.size Numeric, size of the panel names.
+#' @param point.size Size of points in the biserial correlation plot.
+#' @param line.size Line width in the biserial correlation plot.
 #' @param plot Boolean, prints biserial correlation plot if \code{TRUE}.
 #'
 #' @return A named list with two slots named \code{plot} and \code{df}. The former contains a ggplot object with the biserial correlation analysis. The latter is a data frame with the following columns:
@@ -34,7 +44,7 @@
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-biserialCorrelation <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE){
+biserialCorrelation <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE, axis.text.size = 6, legend.text.size = 12, strip.text.size = 10, point.size = 1, line.size = 1){
 
   #getting variables
   if(is.null(variables) == TRUE){
@@ -78,7 +88,7 @@ biserialCorrelation <- function(x, presence.column = "presence", variables = NUL
   ) +
     ggplot2::geom_point(
       alpha = 0.05,
-      size = 3
+      size = point.size
     ) +
     ggplot2::facet_wrap("variable", scales = "free") +
     viridis::scale_color_viridis(
@@ -87,12 +97,18 @@ biserialCorrelation <- function(x, presence.column = "presence", variables = NUL
     ) +
     ggplot2::geom_smooth(
       method = "lm",
-      size = 2,
+      size = line.size,
       color = viridis::viridis(1, begin = 0.5)) +
     ggplot2::guides(colour = guide_legend(override.aes = list(alpha = 1))) +
     ggplot2::ylab("Variable") +
     ggplot2::xlab("Presence") +
-    ggplot2::theme(legend.position = "bottom")
+    ggplot2::theme(legend.position = "bottom") +
+    theme(
+      legend.position = "bottom",
+      axis.text = element_text(size = axis.text.size),
+      legend.text = element_text(size = legend.text.size),
+      strip.text = element_text(size = strip.text.size)
+    )
 
   #prints plot to screen
   if(plot == TRUE){

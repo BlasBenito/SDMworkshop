@@ -287,7 +287,8 @@ prepareTrainingData <- function(
       variable = variables[[1]],
       points.x = rev(presence$x),
       points.y = rev(presence$y),
-      points.groups = rev(presence$presence)
+      points.groups = rev(presence$presence),
+      points.size = 3
     )
    print(x)
   }
