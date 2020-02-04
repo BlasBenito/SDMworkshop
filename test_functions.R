@@ -341,7 +341,10 @@ plot(x[[1]])
 x <- import4D(
   folder = folder,
   dynamic.vars = dynamic.vars,
-  times = times
+  times = times,
+  to.data.frame = TRUE
 )
 
 plot(x[[1]])
+
+x.df <- dfFrom4D(x = x)

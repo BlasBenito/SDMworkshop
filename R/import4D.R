@@ -217,6 +217,7 @@ import4D <- function(
             y = raster.template,
             method = "bilinear"
           )
+
         }
 
       } #end of else
@@ -242,7 +243,7 @@ import4D <- function(
         mask = mask
       )
 
-      #substitutes names
+      #replaces names
       names(output.list[[time.step.i]]) <- c(dynamic.vars, static.vars)
 
     }
@@ -250,23 +251,9 @@ import4D <- function(
     #to data.frame
     if(to.data.frame == TRUE){
 
-      #iterates through bricks in output.list
-      for(time.step.i in times){
+       output.df <- dfFrom4D(x = output.list)
 
-        #to df
-        output.list[[time.step.i]] <- raster::as.data.frame(
-          x = output.list[[time.step.i]],
-          xy = TRUE,
-          na.rm = TRUE
-        )
-
-        #time.step column
-        output.list[[time.step.i]]$time <- time.step.i
-
-      }
-
-      #to data.frame
-      output.list <- dplyr::bind_rows(output.list)
+       return(output.df)
 
     }
 
