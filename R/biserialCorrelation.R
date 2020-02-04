@@ -44,7 +44,7 @@
 #'
 #' @author Blas Benito <blasbenito@gmail.com>
 #' @export
-biserialCorrelation <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, plot = TRUE, axis.text.size = 6, legend.text.size = 12, strip.text.size = 10, point.size = 1, line.size = 1){
+biserialCorrelation <- function(x, presence.column = "presence", variables = NULL, exclude.variables = NULL, axis.text.size = 6, legend.text.size = 12, strip.text.size = 10, point.size = 1, line.size = 1, plot = TRUE){
 
   #getting variables
   if(is.null(variables) == TRUE){

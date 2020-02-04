@@ -267,3 +267,81 @@ x <- plotUseAvailability(
   exclude.variables = c("x", "y"),
   plot = TRUE
 )
+
+
+# 9 import4D -----------------------------
+
+folder <- "/home/blas/Dropbox/GITHUB/R_packages/SDMworkshop/example_data/by_file"
+dynamic.vars <- c("chl", "cufes", "sst", "tsm")
+static.vars <- c("bat", "dist_guadalete", "dist_guadalquivir", "dist_guadiana", "slope")
+vars.crs <- "+init=epsg:4326"
+times <- c("2006", "2007", "2009", "2010", "2013", "2014", "2015", "2016", "2017", "2018", "2019")
+to.memory = FALSE
+to.data.frame = FALSE
+
+
+# modify raster.template to check that the homogeneization options actually work
+raster.template <- raster::raster("/home/blas/Dropbox/GITHUB/R_packages/SDMworkshop/example_data/by_file/bat.asc")
+raster::crs(raster.template) <- "+init=epsg:4326"
+raster.template <- raster::crop(raster.template, y = c(-10, 10, 30, 50))
+raster.template <- raster::aggregate(raster.template, fact = 2)
+raster.template <- raster::projectRaster(from = raster.template, res = 10000, crs = "+init=epsg:23030")
+
+x <- import4D(
+  raster.template = raster.template,
+  folder = folder,
+  dynamic.vars = dynamic.vars,
+  static.vars = static.vars,
+  vars.crs = vars.crs,
+  times = times,
+  to.memory = to.memory,
+  to.data.frame = to.data.frame
+  )
+
+plot(x[[1]])
+
+
+x <- import4D(
+  raster.template = "/home/blas/Dropbox/GITHUB/R_packages/SDMworkshop/example_data/by_file/bat.asc",
+  folder = folder,
+  dynamic.vars = dynamic.vars,
+  static.vars = static.vars,
+  vars.crs = vars.crs,
+  times = times,
+  to.memory = to.memory,
+  to.data.frame = to.data.frame
+)
+
+plot(x[[1]])
+
+x <- import4D(
+  raster.template = "/home/blas/Dropbox/GITHUB/R_packages/SDMworkshop/example_data/by_file/bat.asc",
+  raster.template.crs = vars.crs,
+  folder = folder,
+  dynamic.vars = dynamic.vars,
+  static.vars = static.vars,
+  vars.crs = vars.crs,
+  times = times,
+  to.memory = to.memory,
+  to.data.frame = to.data.frame
+)
+
+plot(x[[1]])
+
+
+x <- import4D(
+  folder = folder,
+  dynamic.vars = dynamic.vars,
+  static.vars = static.vars,
+  times = times
+)
+
+plot(x[[1]])
+
+x <- import4D(
+  folder = folder,
+  dynamic.vars = dynamic.vars,
+  times = times
+)
+
+plot(x[[1]])

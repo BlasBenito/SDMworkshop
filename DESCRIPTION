@@ -28,7 +28,8 @@ Imports:
     dismo,
     rgeos,
     sp,
-    ggdendro
+    ggdendro,
+    here
 Suggests: 
     devtools,
     formatR,
